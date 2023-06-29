@@ -1,4 +1,4 @@
-const transformJsonResponse = (json: any) => {
+const transformThreadsData = (json: any) => {
   return json.data.children.map((sub: Subreddit) => {
     return {
       id: sub.data.id,
@@ -13,9 +13,19 @@ const transformJsonResponse = (json: any) => {
       thumbnail: sub.data.thumbnail,
       src: sub.data.url,
       //src: sub.data.preview?.images[0].source.url,
-      media: sub.data.secure_media?.reddit_video?.fallback_url || null
+      media: sub.data.secure_media?.reddit_video?.fallback_url
+      || null
     };
   });
+}
+
+const transformSubredditData = ({ data }: any) => {
+  return {
+    subscribers: data.active_user_count,
+    description: data.description_html,
+    headerImg: data.header_img,
+    publicDescription: data.public_description_html
+  }
 }
 
 export const fetchPopularThreads = async ([after, before, count]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
@@ -27,7 +37,7 @@ export const fetchPopularThreads = async ([after, before, count]: PopularThreads
   : '';
   const response: Response = await fetch(baseUrl + queryString);
   const json: PopularJsonResponse = await response.json();
-  const popularThreads: Subreddit[] = transformJsonResponse(json);
+  const popularThreads: Subreddit[] = transformThreadsData(json);
   return { 
     popularThreads,
     pagination : {
@@ -71,11 +81,11 @@ export const searchSubreddits = async (searchTerm: string) => {
 }
 
 export const fetchSubredditData = async (subreddit: string) => {
-  const url = `https://www.reddit.com/r/${subreddit}.json`;
-  const response = await fetch(url);
-  const json = await response.json();
-  console.log(json)
-  return transformJsonResponse(json);
+  const threadsURL = `https://www.reddit.com/r/${subreddit}.json`;
+  const aboutURL = `https://www.reddit.com/r/${subreddit}/about.json`;
+  const response = await Promise.all([fetch(threadsURL), fetch(aboutURL)]);
+  const json = await Promise.all([response[0].json(), response[1].json()]);
+  return [transformThreadsData(json[0]), transformSubredditData(json[1])];
 }
 
 export const fetchPopularSubreddits = async() => {
