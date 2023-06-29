@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue';
 import type { Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchSingleThread } from '@/utils/apiRequests';
+import { formatHTML } from '../utils/formatHTML';
+import NestedReplies from '../components/NestedReplies.vue';
 
 const { params: { subreddit, threadId, threadTitle } } = useRoute();
 
@@ -16,19 +18,24 @@ onMounted(async () => {
 });
 
 </script>
+
 <template>
   <main v-if="!isLoading">
     <h1>{{ data.title }}</h1>
-    <h2>in {{ subreddit }}</h2>
-    <p>{{ data.selftext }}</p>
+    <h2>by {{ data.author }}, in {{ subreddit }}</h2>
+    <!-- <p id="thread-body">{{ data.selftext }}</p> -->
+    <article v-html="formatHTML(data.selftext)"></article>
     <h2>Comments</h2>
     <ul>
       <template v-for="item in data.comments" :key="item.id">
         <li v-if="item.author">
           <h3>By {{ item.author }}</h3>
-          <p class="comment-body">{{ item.body }}</p>
-          <p>Replies: {{ item.numberOfReplies }}</p>
+          <p class="comment-body" v-html="formatHTML(item.body)"></p>
           <p>Votes: {{ isNaN(item.votes) ? '0' : item.votes }}</p>
+          <template v-if="item.numberOfReplies">
+            <p>Replies: {{ item.numberOfReplies }}</p>
+            <NestedReplies :replies="item.replies.data.children"/>
+          </template>
         </li>
       </template>
     </ul>
@@ -60,7 +67,6 @@ li {
     border-radius: 6px;
     padding-bottom: 5px
 }
-
 .comment-body {
     padding: 10px
 }
@@ -71,8 +77,8 @@ li p {
 
 @media (min-width: 1000px) {
   main {
-  margin-left: 160px;
-  margin-right: 160px
-}
+    margin-left: 160px;
+    margin-right: 160px
+  }
 }
 </style>
