@@ -1,0 +1,37 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: whitesmoke;
+  transition: 0.4s;
+}
+
+table, th, td {
+  border-collapse: collapse;
+  border: 1px solid gray;
+  margin: 10px 0;
+}
+
+table {
+  margin: 5px;
+}
+
+th, td {
+  padding: 2px 6px
+}
+
+th {
+  background-color: white;
+  color: black
+}
+
+article p, li p {
+  margin-bottom: 10px
+}
