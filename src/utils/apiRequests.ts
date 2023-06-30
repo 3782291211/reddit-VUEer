@@ -12,7 +12,6 @@ const transformThreadsData = (json: any) => {
       downs: sub.data.downs,
       thumbnail: sub.data.thumbnail,
       src: sub.data.url,
-      //src: sub.data.preview?.images[0].source.url,
       media: sub.data.secure_media?.reddit_video?.fallback_url
       || null
     };
@@ -78,6 +77,20 @@ export const searchSubreddits = async (searchTerm: string) => {
   })
   
   return communities;
+}
+
+export const searchThreads = async (searchTerm: string) => {
+  const url: string = `https://www.reddit.com/r/all/search.json?q=${searchTerm}`;
+  const response = await fetch(url);
+  const json = await response.json();
+  if (!json.data) return [];
+  return json.data.children.map((thread: any) => {
+    return {
+      id: thread.data.id,
+      title: thread.data.title,
+      link: thread.data.permalink
+    }
+  });
 }
 
 export const fetchSubredditData = async (subreddit: string) => {
