@@ -9,8 +9,8 @@
 svg {
   position: absolute;
   z-index: 1;
-  right: 20px;
-  top: 20px;
+  right: 10px;
+  top: 10px;
   border-radius: 5px;
   transition: 0.5s fill ease-in-out;
   cursor: pointer;
