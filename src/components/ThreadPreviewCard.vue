@@ -18,11 +18,14 @@ const thumbnailSrc = computed(() => {
   <a :href="item.url">
     <h2>{{ item.title }}</h2>
     <article>
-      <span>By {{ item.author }}</span>
-      <span>{{ item.created }}</span>
-      <p>{{ item.subreddit }}</p>
-      <p>Ups: {{ item.ups }} | downs: {{ item.downs }}</p>
-      <a class="external" v-if="formatURL(item.src)" :href="item.src">{{ formatURL(item.src) + '..' }}</a>
+      <div class="author-votes">
+        <p>By {{ item.author }} in {{ item.subreddit }}</p>
+        <div class="votes">
+          <img src="../assets/updown.svg">
+          <span>{{ item.ups + item.downs }}</span>
+        </div>
+      </div>
+      <a class="external" v-if="formatURL(item.src)" :href="item.src" target="_blank">{{ formatURL(item.src) + '...' }}</a>
       <img v-if="showImage" referrerpolicy="no-referrer" :src="item.src" @error="() => showImage = false"/>
       <img v-if="thumbnailSrc" :src="item.thumbnail" @error="() => showThumbnail = false" style="display: inline"/>
       <div id="v-html" v-if="item.selftext" v-html="formatHTML(item.selftext)"></div>
@@ -30,14 +33,26 @@ const thumbnailSrc = computed(() => {
         <source :src="item.media" type="video/mp4">
         Your browser does not support this file format.
       </video>
+      <!-- <div v-else v-html="formatHTML(item.embed)"></div> -->
     </article>
   </a>
 </template>
 
 <style>
+h2 {
+  border-bottom: 1px solid rgb(66, 62, 62);
+  padding: 7px 0;
+}
 
-article {
-  padding: 10px 0;
+.votes > * {
+  display: inline;
+  margin: -2px 3px
+}
+
+.author-votes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
 }
 
 #v-html {
@@ -51,7 +66,8 @@ article {
 
 img {
   display: block;
-  max-height: 350px;
+  max-width: 100%;
+  max-height: 400px;
   margin: 0 auto
 }
 
@@ -61,7 +77,10 @@ a.external {
 
 video {
   display: block;
-  margin: 0 auto
+  margin: 0 auto;
+  height: auto;
+  width: 100%;;
+  max-height: 400px
 }
 
 .body {
