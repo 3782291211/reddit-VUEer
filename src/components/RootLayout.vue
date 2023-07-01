@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, Ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, Ref, StyleValue, watch } from 'vue';
 import { searchSubreddits } from '@/utils/apiRequests';
 import { fetchPopularSubreddits } from '../utils/apiRequests';
 import { useRoute } from 'vue-router';
 import list from '../assets/list.vue';
 import close from '../assets/close.vue';
+import SearchBar from '../components/SearchBar.vue';
 
 const searchResults: Ref<string[]> = ref([]);
 const popularSubreddits: Ref<any> = ref([]);
@@ -14,6 +15,7 @@ const inputIsBlurred: Ref<boolean> = ref(true);
 const activeParam: Ref<string> = ref('');
 const showMenu = ref(false);
 const windowWidth = ref(window.innerWidth);
+const sidebarZIndex = ref(1);
 const route = useRoute();
 
 onMounted(async () => {
@@ -45,11 +47,16 @@ const showSearchResults = computed(() => {
 })
 
 const handleBlur = (e: FocusEvent) => {
-  const targetName = (e.relatedTarget as any).name;
+  const targetName = (e.relatedTarget as any)?.name;
   if (targetName === "link") return;
   inputIsBlurred.value = true;
- // searchResults.value = [];
 }
+
+/*const toggleZIndex = (e: boolean) => {
+  console.log(e);
+  if (e) sidebarZIndex.value = 0;
+  sidebarZIndex.value = 1;
+}*/
 
 const handleFocus = () => inputIsBlurred.value = false;
 const handleWidthChange = () => windowWidth.value = window.innerWidth;
@@ -58,24 +65,35 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]) => {
   if (resultsArray.indexOf(sub) === resultsArray.length - 1) return 'last';
 }
 
+// const headerPosition = computed(() => ({ position: showMenu ? 'static' : 'fixed' }));
+
 </script>
 
 <template>
-  <!-- <Sidebar :show-menu="showMenu" :search-term="searchTerm" :handle-blur="handleBlur" :handle-focus="handleFocus"/> -->
-
-  <list v-if="!showMenu" class="mobile" @click="() => showMenu = true"/>
-  <close v-if="showMenu" class="mobile" @click="() => showMenu = false"/>
+  <header>
+    <h2 class="banner">reddit VUEer</h2>
+    <!-- <SearchBar @showing-results="toggleZIndex"/> -->
+    <SearchBar/>
+  </header>
+  <div class="menu-controls">
+    <list v-if="!showMenu" class="mobile" @click="() => showMenu = true"/>
+    <close v-if="showMenu" class="mobile" @click="() => showMenu = false"/>
+  </div>
   <section v-if="showMenu || windowWidth > 1000" id="feeds">
     <h3>Filter threads</h3>
     <div class="router-links">
-      <RouterLink to="/">Popular</RouterLink>
-      <RouterLink to="/">Hot</RouterLink>
-      <RouterLink to="/">New</RouterLink>
-      <RouterLink to="/">Best</RouterLink>
-      <RouterLink to="/">Top</RouterLink>
+      <router-link class="grow" to="/popular">Popular</router-link>
+      <router-link class="grow" to="/top">Top</router-link>
+      <router-link to="/hot">Hot</router-link>
+      <router-link to="/new">New</router-link>
+      <router-link to="/best">Best</router-link>
     </div>
     <label for="search">Search subreddits</label>  
-    <input id="search" v-model.trim="searchTerm" @blur="handleBlur" @focus="handleFocus">
+    <div class="flex">
+      <input id="search" v-model.trim="searchTerm" @blur="handleBlur" @focus="handleFocus">
+      <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" beat />
+    </div>
+    <!-- <ul name="search-results" v-if="showSearchResults"> -->
     <ul name="search-results" v-if="showSearchResults">
       <li v-for="subreddit in searchResults" :key="subreddit">
         <a name="link" :href="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']">{{ subreddit }}</p></a>
