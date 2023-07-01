@@ -1,22 +1,45 @@
 #feeds {
-  width: 200px;
+  width: auto;
   position: fixed;
   top: 50%;
-  transform: translate(-20%, -50%);
-  margin-left: 60px;
+  /* transform: translate(-20%, -50%);
+  margin: 30px 0 0 60px; - original */
+  transform: translate(0, -50%);
+  margin: 20px 0 0 10px;
   max-height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
+  z-index: 1; /* Switched from -1 */
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  left: 0
 }
 
 input {
   display: block;
-  width: 100%;
+  width: 90%;
   height: 25px;
   font-size: 15px;
-  padding: 13px 3px;
-  border-radius: 6px;
-  margin: auto
+  padding: 13px;
+  border-radius: 16px;
+  margin: auto;
+  border: 1px solid #ef53507d
+}
+
+.icon {
+  position: relative;
+  right: 38px;
+  color: black;
+  margin-right: -15px
+}
+
+.flex {
+  display: flex;
+  align-items: center;
 }
 
 h3, label {
@@ -37,17 +60,18 @@ label {
 ul {
     list-style: none;
     padding: 10px 3px;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    /* background-color: #41495c; */
     background: linear-gradient(#1E2129, #41495c, #1E2129);
 }
 
 ul[name="search-results"] {
-  border-radius: 7px;
-  border: none;
-  padding: 0;
-  margin: 4px
+  width: 88%;
+  margin: auto;
+  padding: 0
+}
+
+ul[name="popular-subreddits"] {
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 .router-links {
@@ -58,14 +82,20 @@ ul[name="search-results"] {
 .router-links a {
   flex-grow: 1;
   text-align: center;
-  margin: 4px;
+  margin: 6px;
   padding: 4px;
   border-radius: 7px;
   background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
+  transition: transform 0.3s ease-in-out;
 }
 
 a.grow {
   min-width: 45%;
+}
+
+.router-links a:active {
+  background: rgba(168, 167, 167, 0.987);
+  color: black;
 }
 
 .first {
@@ -77,6 +107,16 @@ a.grow {
   border-bottom-right-radius: 5px;
 }
 
+/*
+I've moved these to global styles. Might want to delete these later! Thanks buddy.
+
+ul[name="search-results"] {
+  border-radius: 7px;
+  border: none;
+  padding: 0;
+  margin: 4px
+}
+
 .search-results {
     background-color: whitesmoke;
     color: black;
@@ -85,17 +125,17 @@ a.grow {
     padding: 3px 5px;
     margin: 0
 }
-.search-results:hover, .popular:hover, .current, .router-links a:hover {
+.search-results:hover, .popular:hover, .current {
     background-color: rgb(255, 82, 3);
     color: rgb(255, 255, 255);
     cursor: pointer;
-}
+} */
 
 .popular {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 2px 6px;
+  padding: 4px 6px;
   transition: 0.4s;
 }
 
@@ -107,13 +147,18 @@ a.grow {
   background: linear-gradient(to right, #ef5350, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 1.5em;
-  padding: 15px 23px;
+  border-bottom: 1px solid rgb(66, 62, 62);
+  padding: 12px;
   position: absolute;
+  display: flex;
   top: 0;
   left: 0;
   width: 100%;
   background-color: #15171c;
+}
+
+.banner h2 {
+  font-size: 1.5em;
 }
 
 .banner:before {
@@ -124,7 +169,7 @@ a.grow {
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.839);
   z-index: -1;
 }
 
@@ -132,17 +177,20 @@ a.grow {
   .mobile {
     display: none
   }
+
+  .router-links a:hover {
+    transform: scale(1.1);
+  }
 }
 
 @media (max-width: 1000px) {
   #feeds {
-    position: relative;
-    top: -33px;
     width: 100%;
+    top: 0;
+    z-index: 3;
     transform: translate(0, 0);
     background-color: #292d38;
     margin: 0;
-    margin-bottom: -90px;
     padding: 13px 12px;
     border-bottom: 1px solid rgb(123, 119, 119);
   }
@@ -172,12 +220,14 @@ a.grow {
   }
 
   ul[name="search-results"] {
-    width: 100%;
-    margin: auto
+    width: 99%;
+    margin: 0 auto;
+    padding: 0
   }
 
   input {
-    padding: 13px 7px
+    padding: 13px 7px;
+    width: 100%
   }
 
   .search-results {
@@ -193,8 +243,12 @@ a.grow {
   .router-links a {
     display: inline-block;
     margin: 4px;
-    width: 90px
+    width: 90px;
   }
+
+  .icon {
+    right: 30px;
+}
 }
 
 @media (hover: hover) {
