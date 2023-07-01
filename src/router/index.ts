@@ -6,7 +6,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/:sortBy',
       name: 'popular',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -14,14 +14,14 @@ const router = createRouter({
       component: () => import('../views/PopularThreadsView.vue')
     },
     {
-      path: '/r/:subreddit/comments/:threadId/:threadTitle',
-      name: 'thread',
-      component: SingleThreadView
-    },
-    {
       path: '/r/:subreddit',
       name: 'subreddit',
       component: SubredditView
+    },
+    {
+      path: '/r/:subreddit/comments/:threadId/:threadTitle',
+      name: 'thread',
+      component: SingleThreadView
     }
   ]
 })
