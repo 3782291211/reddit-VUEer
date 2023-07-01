@@ -5,36 +5,42 @@ import { useRoute } from 'vue-router';
 
 const searchTerm = ref('');
 const searchResults: Ref<any[]> = ref([]);
-const inputIsBlurred = ref(true);
+const showResults = ref(true);
 const route = useRoute();
 
-const handleBlur = (e: FocusEvent) => {
-  const targetName = (e.relatedTarget as any).name;
-  console.log(targetName);
-  if (targetName === "link") return;
-  inputIsBlurred.value = true;
-}
-
 const handleSubmit = async () => {
+  showResults.value = true;
   searchResults.value = await searchThreads(searchTerm.value);
 }
 
-//watch([searchTerm, inputIsBlurred], async ([newSearchTerm]) => {
-  // searchResults.value = await searchThreads(newSearchTerm);
-//});
+//const emit = defineEmits(['showingResults']);
 
-watch(() => route.path, () => inputIsBlurred.value = true);
+const handleClick = (e: Event) => {
+  if ((e.target as any).name === "link") return;
+  showResults.value = false;
+}
+
+onMounted(() => document.addEventListener('click', handleClick));
+onUnmounted(() => document.removeEventListener('click', handleClick));
+
+watch(() => route.path, () => {
+  showResults.value = false;
+});
+
+/*watch(() => showResults.value, () => {
+  emit('showingResults', showResults.value);
+})*/
 
 </script>
 
 <template>
   <section>
     <form @submit.prevent="handleSubmit">
-      <input v-model.trim="searchTerm" type="text" @blur="handleBlur" @focus="() => inputIsBlurred = false" placeholder="Search threads" :class="{searching: searchResults.length && !inputIsBlurred}">
+      <input v-model.trim="searchTerm" type="text" placeholder="Search threads" :class="{searching: searchResults.length}">
       <input type="submit" value="Search">
       <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" beat />
     </form>
-    <ul v-if="searchResults.length && !inputIsBlurred" name="search-results">
+    <ul v-if="searchResults.length && showResults" name="search-results">
       <li v-for="thread in searchResults" :key="thread.id">
         <router-link name="link" :to="`${thread.link}`" :class="['search-results']">{{ thread.title }}</router-link>
       </li>
@@ -43,23 +49,62 @@ watch(() => route.path, () => inputIsBlurred.value = true);
 </template>
 
 <style scoped>
+
 section {
-    position: relative;
-    top: 14px;
-    margin: auto;
-    width: 60%;
-    max-width: 500px;
-    text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  margin-left: 10px
+}
+
+form {
+  margin-top: 13px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+input[type="text"] {
+    /* width: 35%; */
+    /* max-width: 500px; */
+    width: 500px;
+    color: black;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    padding: 8px 20px;
+    border: 1px solid rgb(86, 82, 87);
+    box-shadow: 0 0 10px 0 #e94f0db3;
+    z-index: 2;
+}
+
+input[type="submit"] {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border: 1px solid rgb(86, 82, 87);
+    padding: 8px 8px;
+    width: 85px;
+    background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
+    color: white;
+    font-weight: 700;
+    text-align: left;
+    z-index: 2;
 }
 
 ul {
-    text-align: left;
     background-color: whitesmoke;
     position: absolute;
-    top: 28px;
+    top: 35px;
+    /* left: 28%;
+    top: 35px; */
+    /* width: 41.9%; */
+    margin: auto auto auto -14px;
+    max-width: 570px;
     list-style: none;
-    padding: 6px;
-    z-index: 2;
+    padding: 13px 6px 0;
+    z-index: 1;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
@@ -73,29 +118,11 @@ ul {
   -webkit-box-orient: vertical;
 }
 
-input[type="text"] {
-    position: relative;
-    text-align: center;
-    color: black;
-    border-radius: 18px;
-    padding: 8px 8px;
-    width: 99%;
-    border: 1px solid rgb(216, 65, 41);
-    box-shadow: 0 0 10px 0 #e94f0db3;
-}
-
-input[type="submit"] {
-    position: relative;
-    border-radius: 18px;
-    border: 1px solid rgb(241, 71, 253);
-    padding: 6px 4px 6px 9px;
-    bottom: 31.5px;
-    left: 42%;
-    width: 85px;
-    background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
-    color: white;
-    font-weight: 700;
-    text-align: left;
+.icon {
+  position: relative;
+  right: 26px;
+  color: whitesmoke;
+  z-index: 2;
 }
 
 .searching {
@@ -104,16 +131,11 @@ input[type="submit"] {
     padding: 6px 8px 8px;
 }
 
-.icon {
-    position: relative;
-    bottom: 31px;
-    left: 37%;
-    color: black
+
+@media (max-width: 1000px) {
+  section {
+    display: none;
+  } 
 }
 
-@media (max-width: 850px) {
-  section {
-    width: 40%;
-  }
-}
 </style>
