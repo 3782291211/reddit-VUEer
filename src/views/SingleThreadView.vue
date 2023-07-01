@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchSingleThread } from '@/utils/apiRequests';
@@ -16,6 +16,10 @@ onMounted(async () => {
   data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
   isLoading.value = false;
 });
+
+watch(() => threadTitle, async () => {
+  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
+})
 
 </script>
 
@@ -53,13 +57,10 @@ onMounted(async () => {
 
 <style scoped>
 main {
-  width: 60%;
-  margin-left: 290px !important;
-  margin-top: 50px
-}
-
-h1 {
-    margin-top: 40px;
+  position: relative;
+  top: 80px;
+  width: 65%;
+  margin-left: 320px !important;
 }
 
 ul {
@@ -133,9 +134,8 @@ li p {
 @media (max-width: 1000px) {
   main {
     width: 95%;
-    margin: 100px auto 50px !important;
-    /* margin-left: 160px;
-    margin-right: 160px */
+    margin: 0 auto 50px !important;
+
   }
 }
 </style>
