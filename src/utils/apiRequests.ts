@@ -27,16 +27,26 @@ const transformSubredditData = ({ data }: any) => {
   }
 }
 
-export const fetchPopularThreads = async ([after, before, count]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
-  const baseUrl = 'https://www.reddit.com/r/popular.json';
-  //const baseUrl = 'https://www.reddit.com/r/all/top.json';
+//fetch top, best, new, hot:
+//`https://www.reddit.com/r/all/${filter}.json`
+
+export const fetchPopularThreads = async ([after, before, count, sortBy]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
+  let baseUrl;
+  if (sortBy === 'popular') {
+    baseUrl = 'https://www.reddit.com/r/popular.json';
+  } else {
+    baseUrl = `https://www.reddit.com/r/all/${sortBy}.json`;
+  }
+  
   const queryString = !after && !before ? ''
   : !after && before ? `?before=${before}&count=${count}`
   : after && !before ? `?after=${after}&count=${count}`
   : '';
+
   const response: Response = await fetch(baseUrl + queryString);
   const json: PopularJsonResponse = await response.json();
   const popularThreads: Subreddit[] = transformThreadsData(json);
+  
   return { 
     popularThreads,
     pagination : {
@@ -122,4 +132,6 @@ https://www.reddit.com/r/jokes/about.json
 ttps://www.reddit.com/search.json?q=${term}&sort=top`
 
 https://www.reddit.com/${selectedSubreddit.name}/search.json?q=${term}&restrict_sr=1`;
+
+//const baseUrl = 'https://www.reddit.com/r/all/top.json';
 */
