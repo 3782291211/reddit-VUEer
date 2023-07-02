@@ -1,0 +1,68 @@
+main {
+  position: relative;
+  top: 80px;
+  overflow-x: auto;
+}
+
+ul {
+  padding: 0;
+}
+
+h1 {
+  position: relative;
+  left: 30px;
+  top: 10px;
+  margin: 0 auto 20px;
+  font-weight: 900;
+}
+
+h2 {
+  border-bottom: 1px solid gray;
+  padding: 5px 0;
+  color: whitesmoke
+}
+
+.arrow {
+  display: inline;
+  height: 45px;
+  width: 45px;
+  padding: 5px;
+  transition: padding 0.2s ease-in-out;
+  margin: 0 5px
+}
+
+.arrow:hover {
+  padding: 0;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0 -10px
+}
+
+@media (min-width: 1000px) {
+  main {
+    margin-left: 120px;
+    top: 110px
+  }
+  li {
+    width: 70%
+  }
+  h1 {
+    width: 70%;
+  }
+  ul {
+    margin-left: 40px;
+  }
+  .pagination {
+    margin: -10px 0
+  }
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 25px;
+    left: 0;
+    width: fit-content;
+  }
+}
