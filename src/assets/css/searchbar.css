@@ -1,0 +1,139 @@
+section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  margin-left: 10px
+}
+
+form {
+  margin-top: 17px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+input[type="text"] {
+    width: 500px;
+    background-color: #1E2129;
+    color: white;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    padding: 7.5px 20px;
+    border: 1px solid #e94f0db3;
+    box-shadow: 0 0 10px 0 #e94f0db3;
+    z-index: 2;
+}
+
+input[type="submit"] {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    border: 1px solid rgb(86, 82, 87);
+    padding: 8px 8px;
+    width: 85px;
+    background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
+    color: white;
+    font-weight: 700;
+    text-align: left;
+    z-index: 2;
+}
+
+.rounded {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.alert {
+  position: relative;
+  top: 52px;
+  background-color: rgb(245, 70, 70);
+  color: rgb(255, 255, 255);
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 7px;
+}
+
+ul {
+    background-color: whitesmoke;
+    position: absolute;
+    top: 35px;
+    margin: auto auto auto -14px;
+    max-width: 570px;
+    list-style: none;
+    padding: 13px 6px 5px;
+    z-index: 1;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.search-results {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.389);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; 
+  -webkit-box-orient: vertical;
+}
+
+.icon {
+  position: relative;
+  right: 26px;
+  color: whitesmoke;
+  z-index: 2;
+}
+
+.spinner {
+  position: relative;
+  right: 35px;
+  scale: 0.8;
+  z-index: 3;
+}
+
+.searching {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 6px 8px 8px;
+}
+
+/* Searchbar styles for mobile menu */
+.mobileSearchbar {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 5px
+}
+
+.mobileSearchbar form {
+  min-width: 100%;
+  position: static;
+  margin: 0 auto;
+}
+.mobileSearchbar form input[type="text"] {
+  width: 100%;
+}
+.mobileSearchbar form input[type="submit"] {
+  width: 10%;
+  padding-right: 85px
+}
+
+.mobileSearchbar form .icon {
+  position: absolute;
+  right: 30px
+}
+
+.mobileSearchbar ul {
+  position: relative;
+  margin: 0 auto;
+  padding-bottom: 5px;
+  min-width: 99%;
+  top: -10px;
+}
+
+@media (max-width: 1000px) {
+  .alert {
+    top: 0;
+  }
+}
