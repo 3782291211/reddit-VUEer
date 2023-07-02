@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SingleThreadView from '../views/SingleThreadView.vue'
 import SubredditView from '../views/SubredditView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/:sortBy',
+      path: '/:sortBy?',
       name: 'popular',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -21,7 +20,7 @@ const router = createRouter({
     {
       path: '/r/:subreddit/comments/:threadId/:threadTitle',
       name: 'thread',
-      component: SingleThreadView
+      component: () => import('../views/SingleThreadView.vue')
     }
   ]
 })
