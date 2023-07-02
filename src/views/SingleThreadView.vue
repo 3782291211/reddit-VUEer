@@ -2,140 +2,118 @@
 
 import { ref, onMounted, watch } from 'vue';
 import type { Ref } from 'vue';
+import { RouteParams } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { fetchSingleThread } from '@/utils/apiRequests';
 import { formatHTML } from '../utils/formatHTML';
+import { formatURL } from '../utils/formatURL';
 import NestedReplies from '../components/NestedReplies.vue';
+import Spinner from '../components/Spinner.vue';
+import { removeEntities } from '@/utils/removeEntities';
 
-const { params: { subreddit, threadId, threadTitle } } = useRoute();
-
+const route = useRoute();
 const data: Ref<any> = ref([]);
-const isLoading = ref(true);
+const isLoading = ref(false);
 
-onMounted(async () => {
-  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
-  isLoading.value = false;
+const fetchData = (newParams: RouteParams | null) => {
+  const { subreddit, threadId, threadTitle } = newParams || route.params;
+  isLoading.value = true;
+  fetchSingleThread(subreddit as string, threadId as string, threadTitle as string)
+  .then(response => {
+    data.value = response;
+    isLoading.value = false;
+  })
+  .catch(err => {
+    console.log(err);
+    isLoading.value = false;
+  })
+}
+
+const formatVotesLabel = (voteCount: number): string => {
+  const suffix = (voteCount > 1 || voteCount < -1) ? 's' : '';
+  return isNaN(voteCount) ? '0 votes' : `${voteCount} vote${suffix}`;
+}
+
+onMounted(() => fetchData(null));
+
+watch(() => route.params, params => {
+  if (route.path.includes('/comments/')) fetchData(params);
 });
-
-watch(() => threadTitle, async () => {
-  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
-})
 
 </script>
 
 <template>
-  <main v-if="!isLoading">
-    <h1>{{ data.title }}</h1>
-    <h2>by <span>{{ data.author }}</span>, in <span>{{ subreddit }}</span></h2>
-    <!-- <p id="thread-body">{{ data.selftext }}</p> -->
-    <article v-if="data.selftext" class="thread-description" v-html="formatHTML(data.selftext)"></article>
-    <p v-else>This thread is missing a body section. Check back later!</p>
-    <section v-if="data.comments.length">
-      <h2>Comments</h2>
-      <ul>
-        <template v-for="item in data.comments" :key="item.id">
-          <li v-if="item.author">
-            <h3>{{ item.author }}</h3>
-            <div class="comment-body">
-              <article v-html="formatHTML(item.body)"></article>
-              <div class="flex">
-                <span class="inline"><img src="../assets/updown.svg">{{ isNaN(item.votes) ? '0' : item.votes }} votes</span>
-                <span v-if="item.numberOfReplies" class="float"><img src="../assets/bubble.svg">{{ item.numberOfReplies > 1 ? `${item.numberOfReplies} replies` : '1 reply' }}</span>
-              </div>
-            </div>
-            <template v-if="item.numberOfReplies">
-              <NestedReplies :replies="item.replies.data.children"/>
-            </template>
-          </li>
-        </template>
+  <main>
+    <Spinner v-if="isLoading"/>
+    <div v-else-if="data.title">
+      <h1>{{ data.title }}</h1>
+
+      <div class="subtitle">
+        <h2>by <span>{{ data.author }}</span>, in <span>{{ data.sub }}</span></h2>
+        <div>
+          <img class="svg-icon" src="../assets/icons/updown.svg">
+          <span>{{ data.votes }} votes</span>
+        </div>
+      </div>
+      
+      <h3 v-if="data.selftext" class="op">Original post</h3>
+      <article v-if="data.selftext" class="thread-description" v-html="formatHTML(data.selftext)"></article>
+
+      <a v-if="formatURL(data.url)" :href="data.url" target="_blank" class="external">{{ formatURL(data.url) }}...</a>
+
+      <div v-if="data.preview" class="caption">
+        <p v-if="data.preview && data.media?.reddit_video">Preview</p>
+        <a :href="data.url" target="_blank"><img class="preview-img" :src="removeEntities(data.preview)"></a>
+      </div>
+      
+      <div class="embed" v-if="data.embed" v-html="formatHTML(data.embed)"></div>
+
+      <ul v-if="data.images.length">
+        <li v-for="image in data.images" :key="image" name="gallery-img">
+          <img class="gallery-img" :src="removeEntities(image)" referrerpolicy="origin" @error="() => console.log('yayaya')">
+        </li>
       </ul>
-    </section>
-    <p class="no-comments" v-else>There aren't any comments for this thread.</p>
+      <video v-if="data.media?.reddit_video" controls>
+        <source :src="data.media?.reddit_video.fallback_url" type="video/mp4">
+        Video not supported.
+      </video>
+      <section v-if="data.comments?.length">
+        <h2 class="comments-heading">Comments</h2>
+        <ul>
+          <template v-for="item in data.comments" :key="item.id">
+            <li v-if="item.author">
+              <h3>{{ item.author }}</h3>
+              <div class="comment-body">
+                <article v-html="formatHTML(item.body)"></article>
+                <div class="flex">
+                  <span class="inline"><img class="svg-icon" src="../assets/icons/updown.svg">{{ formatVotesLabel(item.votes) }}</span>
+                  <span v-if="item.numberOfReplies" class="float"><img class="svg-icon" src="../assets/images/bubble.svg">{{ item.numberOfReplies > 1 ? `${item.numberOfReplies} replies` : '1 reply' }}</span>
+                </div>
+              </div>
+              <template v-if="item.numberOfReplies">
+                <NestedReplies :replies="item.replies.data.children"/>
+              </template>
+            </li>
+          </template>
+        </ul>
+      </section>
+      <p class="no-comments" v-else>There aren't any comments for this thread.</p>
+    </div>
   </main>
-  <p v-else>Loading article and comments...</p>
 </template>
 
-<style scoped>
-main {
-  position: relative;
-  top: 80px;
-  width: 65%;
-  margin-left: 320px !important;
-}
+<style lang="css" scoped src="../assets/css/single-thread-view.css"> </style>
 
-ul {
-    list-style: none;
-    padding: 0
-}
+<!-- onMounted(async () => {
+  isLoading.value = true;
+  const { subreddit, threadId, threadTitle } = route.params;
+  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
+  isLoading.value = false;
+});
 
-h2 {
-  border-top: 1px solid gray;
-  padding: 4px 0 6px;
-  margin: 15px 0 25px;
-}
-
-span {
-  font-style: italic;
-  font-weight: 700;
-}
-
-img {
-  display: inline;
-  margin: -3px 4px
-}
-
-.float {
-  float: right;
-}
-
-.inline {
-  display: inline;
-  padding: 0;
-  margin-right: 15px
-}
-
-.flex {
-  border-top: 1px solid gray;
-  padding-top: 8px;
-  display: flex;
-}
-
-h3 {
-    color: black;
-    background-color: whitesmoke;
-    padding: 5px 10px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-li {
-    border: 1px solid gray;
-    margin: 20px auto;
-    border-radius: 6px;
-}
-
-.thread-description {
-  margin-bottom: 30px;
-}
-.comment-body {
-    padding: 10px;
-    background-color: #15171c;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.478);
-    border-radius: 7px;
-}
-.no-comments {
-  margin: 10px 0;
-}
-
-li p {
-    padding: 0 10px
-}
-
-@media (max-width: 1000px) {
-  main {
-    width: 95%;
-    margin: 0 auto 50px !important;
-
-  }
-}
-</style>
+watch(() => route.params, async (params) => {
+  isLoading.value = true;
+  const { subreddit, threadId, threadTitle } = params;
+  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
+  isLoading.value = false;
+}); -->
