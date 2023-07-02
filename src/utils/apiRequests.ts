@@ -3,7 +3,6 @@ const transformThreadsData = (json: any) => {
     return {
       id: sub.data.id,
       subreddit: 'r/' + sub.data.subreddit,
-      created: new Date(sub.data.created).toDateString(),
       url: sub.data.permalink.slice(0, -1),
       selftext: sub.data.selftext_html,
       title: sub.data.title,
@@ -23,7 +22,11 @@ const transformSubredditData = ({ data }: any) => {
     subscribers: data.active_user_count,
     description: data.description_html,
     headerImg: data.header_img,
-    publicDescription: data.public_description_html
+    publicDescription: data.public_description_html,
+    category: data.advertiser_category,
+    banner: data.banner_img,
+    header: data.header_img,
+    icon: data.icon_img
   }
 }
 
@@ -44,6 +47,7 @@ export const fetchPopularThreads = async ([after, before, count, sortBy]: Popula
   : '';
 
   const response: Response = await fetch(baseUrl + queryString);
+  if (!response.ok) throw new Error(response.statusText || 'Unable to fetch data.');
   const json: PopularJsonResponse = await response.json();
   const popularThreads: Subreddit[] = transformThreadsData(json);
   
@@ -58,22 +62,48 @@ export const fetchPopularThreads = async ([after, before, count, sortBy]: Popula
 }
 
 export const fetchSingleThread = async (subreddit: string, id: string, threadTitle: string) => {
-  const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${id}/${threadTitle}.json`);
-  const json = await response.json();
-  const { author, title, ups, downs, selftext_html: selftext } = json[0].data.children[0].data;
-  const comments = json[1].data.children.map(({ data }: { data: any }) => {
-    return {
-      id: data.id,
-      title: data.title,
-      author: data.author,
-      body: data.body_html,
-      votes: data.ups - data.downs,
-      numberOfReplies: data.replies ? data.replies.data.children.length : 0,
-      replies: data.replies || []
-    }
-  });
+    const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${id}/${threadTitle}.json`);
+    if (!response.ok) throw new Error(response.statusText || 'Unable to fetch data.');
+    const json = await response.json();
+    const data = json[0].data.children[0].data;
 
-  return { author, title, ups, downs, comments, selftext };
+    const comments = json[1].data.children.map(({ data }: { data: any }) => {
+      return {
+        id: data.id,
+        title: data.title,
+        author: data.author,
+        body: data.body_html,
+        votes: data.ups - data.downs,
+        numberOfReplies: data.replies ? data.replies.data.children.length : 0,
+        replies: data.replies || []
+      }
+    });
+
+    return { 
+      author: data.author, 
+      title: data.title, 
+      votes: Number(data.ups) + Number(data.downs),
+      comments, 
+      selftext: data.selftext_html, 
+      sub: data.subreddit_name_prefixed, 
+      url: data.url, 
+      media: data.secure_media,
+      images: data.media_metadata ? Object.values(data.media_metadata).map((item: any) => item.s.u) : [],
+      preview: data.preview?.images?.[0].source?.url,
+      embed: data.secure_media_embed?.content
+    };
+
+    /*const { 
+      author,
+      title,
+      ups,
+      downs, 
+      selftext_html: selftext, 
+      url,
+      secure_media: media,
+      subreddit_name_prefixed: sub,
+      gallery_data
+    } = json[0].data.children[0].data;*/
 }
 
 export const searchSubreddits = async (searchTerm: string) => {
@@ -107,6 +137,9 @@ export const fetchSubredditData = async (subreddit: string) => {
   const threadsURL = `https://www.reddit.com/r/${subreddit}.json`;
   const aboutURL = `https://www.reddit.com/r/${subreddit}/about.json`;
   const response = await Promise.all([fetch(threadsURL), fetch(aboutURL)]);
+  if (!response[0].ok || !response[1].ok) {
+    throw new Error('Unable to fetch data.');
+  }
   const json = await Promise.all([response[0].json(), response[1].json()]);
   return [transformThreadsData(json[0]), transformSubredditData(json[1])];
 }
