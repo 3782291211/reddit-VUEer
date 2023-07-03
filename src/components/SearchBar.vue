@@ -16,6 +16,7 @@ const handleSubmit = async () => {
   isLoading.value = true;
   searchResults.value = await searchThreads(searchTerm.value);
   isLoading.value = false;
+  searchTerm.value = ''
 
   if(!searchResults.value.length) {
     showAlert.value = true;
@@ -48,12 +49,12 @@ const roundedBorder = computed(() => {
 <template>
   <section>
     <form @submit.prevent="handleSubmit">
-      <input v-model.trim="searchTerm" @blur="() => searchTerm = ''" type="text" placeholder="Search threads" :class="roundedBorder">
+      <input v-model.trim="searchTerm" type="text" placeholder="Search threads" :class="roundedBorder">
       <div v-if="isLoading" class="spinner">
         <font-awesome-icon icon="spinner" spin spin-reverse size="2xl" />
       </div>
       <template v-else>
-        <input type="submit" value="Search">
+        <input type="submit" value="Search" :disabled="!searchTerm">
         <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" beat/>
       </template>
     </form>
@@ -63,6 +64,9 @@ const roundedBorder = computed(() => {
       </li>
     </ul>
     <p class="alert" v-if="showAlert">No results.</p>
+    <router-link to="/search" id="users">Users
+      <font-awesome-icon icon="user" transform="right-5"/>
+    </router-link>
   </section>
 </template>
 
