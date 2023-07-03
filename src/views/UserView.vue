@@ -7,6 +7,9 @@ import ErrorModal from '@/components/ErrorModal.vue';
 import { useRoute } from 'vue-router';
 import Spinner from '@/components/Spinner.vue';
 import anonymousAvatar from '@/assets/images/anonymous.webp';
+import hearts from '@/assets/icons/hearts.vue';
+import { paginate } from '@/utils/paginator';
+import Pagination from '@/components/Pagination.vue';
 
 const route = useRoute();
 const searchTerm = ref('');
@@ -16,6 +19,23 @@ const noResults = ref(false);
 const isLoading = ref(false);
 const errorMsg = ref('');
 const imgSrc = ref('');
+
+const pagination: Ref<Pagination> = ref({
+  afterQuery: null,
+  beforeQuery: null,
+  countOffset: 0
+});
+
+const handlePagination = async (e: MouseEvent): Promise<void> => {
+  if (userPosts.value.length < 25) return;
+  isLoading.value = true;
+  const response = await paginate(pagination.value, e, null, null, route.params.username as string) as SearchUserResponse;
+  if (response) {
+    userPosts.value = response.posts;
+    pagination.value = response.pagination;
+  }
+  isLoading.value = false;
+}
 
 onMounted(() => {
   if (route.params.username) {
@@ -30,15 +50,19 @@ watch(() => route.params.username, async toParam => {
 const fetchUserData = async (username: string) => {
   try {
     isLoading.value = true;
-    const { posts, profileData } = await searchUser(username);
+    const { posts, profileData, pagination: latestPagination } = await searchUser([null, null, 0, username]);
+    if (profileData) {
+        userProfileData.value = profileData;
+        imgSrc.value = profileData.icon;
+    }
     if (!posts.length) {
         noResults.value = true;
         isLoading.value = false;
+        userPosts.value = [];
         return;
     }
     userPosts.value = posts;
-    userProfileData.value = profileData;
-    imgSrc.value = profileData.icon;
+    pagination.value = latestPagination;
     } catch (err: unknown) {
       errorMsg.value = (err as Error).message || 'Unable to process your request.';
     } finally {
@@ -64,46 +88,58 @@ const handleReset = () => {
 <main>
   <h1>Search users</h1>
   <form @submit.prevent="handleSubmit">
-    <input v-model="searchTerm" type="text" placeholder="Username">
+    <input v-model="searchTerm" type="text" placeholder="Search by username">
     <input type="submit">
     <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" inverse transform="left-32 down-2" beat />
     <input type="reset" value="Clear" @click="handleReset">
   </form>
-  <p v-if="noResults">{{ `hmmm...u/${searchTerm} hasn\'t posted anything.` }}</p>
-
+ 
   <Spinner v-if="isLoading"/>
   <section v-else-if="userProfileData && userPosts">
     <h2>Profile</h2>
 
-    <div>
-      <p v-if="userProfileData.banned">User is banned.</p>
-      <p>Karma: {{ userProfileData.karma }}</p>
-      <h3>{{ userProfileData.name }}</h3>
+    <div class="profile">
+      <div>
+        <h3>{{ userProfileData.name }}</h3>
+        <div class="flex">
+          <p>Karma: {{ userProfileData.karma }}</p>
+          <hearts/>
+        </div>
+        <p v-if="userProfileData.banned">User is banned.</p>
+      </div>
       <img :src="userProfileData.icon" @error="(e: Event) => (e.target as HTMLImageElement).src = anonymousAvatar" :alt="userProfileData.name">
     </div>
     
-    <h2>Posts</h2>
-    <ul v-if="userPosts.length">
-      <li class="thread-preview" v-for="comment in userPosts" :key="comment.id">
-        
-        <template v-if="comment.body">
-          <router-link :to="formatPermalink(comment.link)" target="_blank">
-            <p class="op">Replied to <span class="title">&quot;{{ comment.originalPost }}&quot;</span>&nbsp; in <router-link :to="comment.subreddit" class="subreddit-link">{{ comment.subreddit }}</router-link></p>
-            <p>{{ comment.author }} wrote:</p>
-            <blockquote class="italic" v-if="comment.body" v-html="formatHTML(comment.body)"></blockquote>
-            <p v-else class="italic">(Go to thread)</p>
-          </router-link>
-        </template>
+    <template v-if="userPosts.length">
+      <h2 class="posts-heading">Posts</h2>
+      <Pagination v-if="userPosts.length > 25" :pagination="pagination" @handle-pagination="handlePagination"/>
+      <ul>
+        <li class="thread-preview" v-for="comment in userPosts" :key="comment.id">
 
-        <template v-else>
-          <router-link :to="formatPermalink(comment.link)" target="_blank">
-          <p class="op-no-border">{{ comment.author }} posted a new thread in <span class="subreddit-link">{{ comment.subreddit }}</span></p>
+          <template v-if="comment.body">
+            {{ console.log(formatPermalink(comment.link)) }}
+            <router-link :to="'/' + formatPermalink(comment.link)" target="_blank">
+                <div class="post-header">
+                  <p class="op">Replied to <span class="title">&quot;{{ comment.originalPost }}&quot;</span></p>
+                  <router-link :to="comment.subreddit" class="subreddit-link" target="_blank">{{ comment.subreddit }}</router-link>
+                </div>
+              <p>{{ comment.author }} wrote:</p>
+              <blockquote class="italic" v-if="comment.body" v-html="formatHTML(comment.body)"></blockquote>
+              <p v-else class="italic">(Go to thread)</p>
+            </router-link>
+          </template>
+
+          <template v-else>
+            <router-link :to="formatPermalink(comment.link)" target="_blank">
+            <p class="op-no-border">{{ comment.author }} posted a new thread in <span class="subreddit-link">{{ comment.subreddit }}</span></p>
             <p class="title">{{ comment.newThread }}</p>
           </router-link>
         </template>
 
       </li>
     </ul>
+    </template>
+    <p v-else-if="noResults">{{ `hmmm...u/${searchTerm} hasn\'t posted anything.` }}</p>
   </section>
   <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
 </main>
@@ -136,14 +172,27 @@ h1 {
   font-size: 1.5em
 }
 
-form {
+h2 {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.453)
+}
+
+.posts-heading {
+    margin-bottom: 20px
+}
+
+h3 {
+    font-weight: 600;
+    font-size: 25px
+}
+
+form, .profile {
     margin-top: 30px;
     text-align: center;
     background-color: #15171c;
     border-radius: 120px;
     width: 80%;
     margin: 40px auto;
-    padding: 40px 10px
+    padding: 45px 10px 40px
 }
 
 input[type="text"] {
@@ -177,23 +226,28 @@ input[type="reset"] {
     padding: 8px;
 }
 
+.profile {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 20px;
+    border-radius: 180px;
+}
+
 img {
-    display: block;
-    margin: auto;
-    height: 200px
+    height: 200px;
+    border-radius: 50%;
 }
 
 li {
    width: 100%;
-   margin: 15px auto
+   overflow: auto;
 }
 
-.subreddit-link {
-    margin: 0 3px;
-}
-
-.subreddit-link:hover {
-    margin: 0
+.flex {
+    flex-direction: column;
 }
 
 .italic {
@@ -202,23 +256,86 @@ li {
 }
 
 .title {
-    color: orange
+    color: orange;
+    transition: background-color 0.3s linear, color 0.3s linear;
 }
-
 .title:hover {
-    text-decoration: underline;
-    cursor: pointer
-}
+    background-color: rgb(251, 200, 92);
+    padding: 4px;
+    border-radius: 4px;
+    color: black
+  }
 
 .op {
     line-height: 1.6;
-    border-bottom: 1px solid gray;
     padding-bottom: 9px;
-    margin-top: 4px
+    margin-top: 4px;
+    margin-right: 20px;
+}
+
+.subreddit-link {
+    margin: auto 0;
+    height: fit-content
+}
+
+.post-header, .op-no-border {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
 }
 
 .op-no-border {
     border: none
+}
+
+@media (max-width: 1000px) {
+main {
+  margin: auto;
+  top: 110px
+}
+
+h1 {
+    left: 0;
+    margin-left: 30px
+}
+
+section {
+    width: 90%;
+    margin: auto
+}
+
+form {
+    width: 90%
+}
+
+.profile, h3 {
+    justify-content: space-around;
+    font-size: 16px;
+}
+
+.profile p {
+    font-size: 13px
+}
+
+form, .profile {
+    border-radius: 10px;
+}
+
+img {
+    max-width: 100px;
+    height: auto;
+}
+}
+
+@media (max-width: 500px) {
+    .post-header {
+        flex-direction: column;
+    }
+
+    .subreddit-link {
+        text-align: center;
+        margin: 0 5px 13px
+    }
 }
 
 </style>
