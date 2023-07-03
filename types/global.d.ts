@@ -1,6 +1,8 @@
 export {}
 
 declare global {
+  type stringOrNull = string | null;
+
   export type Subreddit = {
     name: string,
     [key: string]: any
@@ -18,15 +20,41 @@ declare global {
   }
 
   export type Pagination = {
-    afterQuery: string | null,
-    beforeQuery: string | null,
+    afterQuery: stringOrNull,
+    beforeQuery: stringOrNull,
     countOffset: number
   }
 
-  export type PopularThreadsArgs = [string | null, string | null, number];
+  export type PopularThreadsArgs = [stringOrNull, stringOrNull, number, stringOrNull, stringOrNull];
+  export type SearchUserPosts = [stringOrNull, stringOrNull, number, string];
 
   export type PopularThreadsResponse = {
     popularThreads: Subreddit[],
     pagination : Pagination
+  }
+
+  export type Post = {
+    id: string,
+    newThread: stringOrNull,
+    originalPost: stringOrNull,
+    author: string,
+    body: string,
+    votes: number,
+    link: string,
+    subreddit: string
+  }
+
+  export type ProfileData = {
+    icon: string,
+    name: string,
+    karma: number,
+    subscribers: number | null,
+    banned: null | string | boolean,
+  }
+
+  export type SearchUserResponse = {
+    posts: Post[] | [],
+    profileData: ProfileData,
+    pagination: Pagination
   }
 }
