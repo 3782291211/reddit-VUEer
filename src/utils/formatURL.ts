@@ -5,5 +5,9 @@ export const formatURL = (url: string): string | null => {
   //return url.match(/htt(?:p|ps):\/\/(?:www.)?([^/]*\/[^/]{8})/)?.[1] || null;
 }
 
+export const formatPermalink = (url: string) => {
+  return url.match(/r\/[^/]+\/comments\/[^/]+\/[^/]+\//)?.[0] || '';
+}
+
 // (?:) creates a non-capturing group
 // add ? to specify that a given character is optional
