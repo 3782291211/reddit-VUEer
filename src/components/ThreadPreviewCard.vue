@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
 import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { formatHTML } from '../utils/formatHTML';
 import { formatURL } from '../utils/formatURL';
 
 const { item } = defineProps<{ item: Subreddit }>();
+const route = useRoute();
 
 const showImage = ref(true);
 const showThumbnail = ref(true);
@@ -20,7 +22,13 @@ const thumbnailSrc = computed(() => {
   </router-link>
   <article>
     <div class="author-votes">
-      <p class="subreddit">By {{ item.author }} in <router-link :to="item.url">{{ item.subreddit }}</router-link></p>
+      <p class="subreddit">
+        By 
+        <router-link class="user-link" :to="`/search/${item.author}`">{{ item.author }}</router-link>
+        in 
+        <router-link v-if="!route.params.subreddit" class="subreddit-link" :to="item.subreddit">{{ item.subreddit }}</router-link>
+        <span class="orange" v-else>{{ item.subreddit }}</span>
+      </p>
       <div class="votes">
         <img src="../assets/icons/updown.svg">
         <span>{{ item.ups + item.downs }}</span>
