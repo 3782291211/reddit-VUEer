@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import { fetchSubredditData } from '@/utils/apiRequests';
+import { fetchSubredditBody } from '@/utils/apiRequests';
 import { computed, onMounted, ref, Ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { formatHTML } from '@/utils/formatHTML';
-import ThreadPreviewCard from '../components/ThreadPreviewCard.vue';
 import Spinner from '../components/Spinner.vue';
 import backgroundUrl from "@/assets/images/abstract.jpg";
+import PopularThreads from '../components/PopularThreads.vue';
+import ErrorModal from '@/components/ErrorModal.vue';
 
 const route = useRoute();
-const subredditData: Ref<any> = ref([]);
+const subredditBody: Ref<any> = ref({});
 const isLoading = ref(false);
+const errorMsg = ref('');
 
 const fetchData = async (subreddit: string = '') => {
   isLoading.value = true;
   try {
-    const response = await fetchSubredditData(subreddit || route.params.subreddit as string);
-    subredditData.value = response;
-  } catch (err) {
-    console.log(err);
+    const response = await fetchSubredditBody(subreddit || route.params.subreddit as string);
+    subredditBody.value = response;
+  } catch (err: unknown) {
+    errorMsg.value = (err as Error).message || 'Unable to process your request.';
   } finally {
     isLoading.value = false;
   }
@@ -31,46 +33,34 @@ watch(() => route.params.subreddit, async toParams => {
 });
 
 const arrangeArgs = computed(() => {
-  const args = [subredditData.value[1]?.publicDescription, subredditData.value[1]?.description];
+  const args = [subredditBody.value?.publicDescription, subredditBody.value?.description];
   return args.map(arg => arg || '');
 });
-
 
 </script>
 
 <template>
-  <main>
-    <div v-if="subredditData.length" class="overlay">
-      <div class="header" :style="{ backgroundImage: `url(${subredditData[1]?.banner || backgroundUrl })`}">
-        <img v-if="subredditData[1].icon" class="icon" :src="subredditData[1].icon">
-        <h1>r/{{ route.params.subreddit }}</h1>
-        <img v-if="subredditData[1].header" class="header-img" :src="subredditData[1].header">
-      </div>
-    </div>
-    <Spinner v-if="isLoading" />
-    <section v-else>
+  <main class="subreddit-view">
+    <Spinner v-if="isLoading"/>
+    <template v-else-if="Object.keys(subredditBody).length">
+      <section>
+        <div class="overlay">
+          <div class="header" :style="{ backgroundImage: `url(${subredditBody?.banner || backgroundUrl })`}">
+            <img v-if="subredditBody.icon" class="icon" :src="subredditBody.icon">
+            <h1>r/{{ route.params.subreddit }}</h1>
+            <div class="flex">
+              <h2 v-if="subredditBody.category">{{ subredditBody.category }}</h2>
+              <h2 :class="{borderLeft : subredditBody.category}" v-if="subredditBody.subscribers">{{ subredditBody.subscribers }} subscribers</h2>
+            </div>
+            <img v-if="subredditBody.header" class="header-img" :src="subredditBody.header">
+          </div>
+        </div>
       <article v-html="formatHTML(arrangeArgs[0], arrangeArgs[1])" class="thread-description"></article>
-      <ul>
-        <li v-for="thread in subredditData[0]" :key="thread.id" class="thread-preview">
-          <ThreadPreviewCard :item="thread"/>
-        </li>
-      </ul>
-    </section>
+      </section>
+      <PopularThreads view-type="subreddit"/>
+    </template>
+    <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
   </main>
 </template>
 
 <style lang="css" scoped src="../assets/css/subreddit-view.css"/>
-
-<!-- onMounted(async () => {
-  isLoading.value = true;
-  subredditData.value = await fetchSubredditData(route.params.subreddit as string);
-  isLoading.value = false;
-});*/
-
-/*watch(() => route.params.subreddit, async toParams => {
-  if (!route.path.startsWith('/r')) return; 
-  // to prevent throwing error from fetchSubredditData when a user navigates from /r/:subreddit to /:sortBy
-  isLoading.value = true;
-  subredditData.value = await fetchSubredditData(toParams as string);
-  isLoading.value = false;
-}); -->
