@@ -1,4 +1,4 @@
-const transformThreadsData = (json: any) => {
+const transformSubredditThreads = (json: any) => {
   return json.data.children.map((sub: Subreddit) => {
     return {
       id: sub.data.id,
@@ -11,13 +11,12 @@ const transformThreadsData = (json: any) => {
       downs: sub.data.downs,
       thumbnail: sub.data.thumbnail,
       src: sub.data.url,
-      media: sub.data.secure_media?.reddit_video?.fallback_url
-      || null
+      media: sub.data.secure_media?.reddit_video?.fallback_url || null
     };
   });
 }
 
-const transformSubredditData = ({ data }: any) => {
+const transformSubredditBody = ({ data }: any) => {
   return {
     subscribers: data.active_user_count,
     description: data.description_html,
@@ -30,26 +29,25 @@ const transformSubredditData = ({ data }: any) => {
   }
 }
 
-//fetch top, best, new, hot:
-//`https://www.reddit.com/r/all/${filter}.json`
-
-export const fetchPopularThreads = async ([after, before, count, sortBy]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
+export const fetchPopularThreads = async ([after, before, count, sortBy, subreddit]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
   let baseUrl;
-  if (sortBy === 'popular') {
-    baseUrl = 'https://www.reddit.com/r/popular.json';
+  if (subreddit) {
+    baseUrl = `https://www.reddit.com/r/${subreddit}.json?limit=25`;
+  } else if (sortBy === 'popular') {
+    baseUrl = 'https://www.reddit.com/r/popular.json?limit=25';
   } else {
-    baseUrl = `https://www.reddit.com/r/all/${sortBy}.json`;
+    baseUrl = `https://www.reddit.com/r/all/${sortBy}.json?limit=25`;
   }
   
   const queryString = !after && !before ? ''
-  : !after && before ? `?before=${before}&count=${count}`
-  : after && !before ? `?after=${after}&count=${count}`
+  : !after && before ? `&before=${before}&count=${count}`
+  : after && !before ? `&after=${after}&count=${count}`
   : '';
 
   const response: Response = await fetch(baseUrl + queryString);
   if (!response.ok) throw new Error(response.statusText || 'Unable to fetch data.');
   const json: PopularJsonResponse = await response.json();
-  const popularThreads: Subreddit[] = transformThreadsData(json);
+  const popularThreads: Subreddit[] = transformSubredditThreads(json);
   
   return { 
     popularThreads,
@@ -60,6 +58,42 @@ export const fetchPopularThreads = async ([after, before, count, sortBy]: Popula
     }
   };
 }
+
+/*
+
+Intact function
+
+export const fetchPopularThreads = async ([after, before, count, sortBy, subreddit]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
+  let baseUrl;
+  if (subreddit) {
+    baseUrl = `https://www.reddit.com/r/${subreddit}.json?limit=25`;
+  } else if (sortBy === 'popular') {
+    baseUrl = 'https://www.reddit.com/r/popular.json?limit=25';
+  } else {
+    baseUrl = `https://www.reddit.com/r/all/${sortBy}.json?limit=25`;
+  }
+  
+  const queryString = !after && !before ? ''
+  : !after && before ? `&before=${before}&count=${count}`
+  : after && !before ? `&after=${after}&count=${count}`
+  : '';
+
+  const response: Response = await fetch(baseUrl + queryString);
+  if (!response.ok) throw new Error(response.statusText || 'Unable to fetch data.');
+  const json: PopularJsonResponse = await response.json();
+  const popularThreads: Subreddit[] = transformSubredditThreads(json);
+  
+  return { 
+    popularThreads,
+    pagination : {
+        countOffset: count + 25,
+        afterQuery: json.data.after, 
+        beforeQuery: json.data.before
+    }
+  };
+}
+
+*/
 
 export const fetchSingleThread = async (subreddit: string, id: string, threadTitle: string) => {
     const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${id}/${threadTitle}.json`);
@@ -86,29 +120,16 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
       comments, 
       selftext: data.selftext_html, 
       sub: data.subreddit_name_prefixed, 
-      url: data.url, 
+      url: data.url,
       media: data.secure_media,
       images: data.media_metadata ? Object.values(data.media_metadata).map((item: any) => item.s.u) : [],
       preview: data.preview?.images?.[0].source?.url,
       embed: data.secure_media_embed?.content
     };
-
-    /*const { 
-      author,
-      title,
-      ups,
-      downs, 
-      selftext_html: selftext, 
-      url,
-      secure_media: media,
-      subreddit_name_prefixed: sub,
-      gallery_data
-    } = json[0].data.children[0].data;*/
 }
 
 export const searchSubreddits = async (searchTerm: string) => {
   const url: string = `https://www.reddit.com/search.json?q=${searchTerm}&type=sr`;
-  //const url = `https://www.reddit.com/r/all/${searchTerm}.json`; // searches threads
   const data = await fetch(url);
   const json = await data.json();
   if (!json.data) return [];
@@ -133,15 +154,12 @@ export const searchThreads = async (searchTerm: string) => {
   });
 }
 
-export const fetchSubredditData = async (subreddit: string) => {
-  const threadsURL = `https://www.reddit.com/r/${subreddit}.json`;
+export const fetchSubredditBody = async (subreddit: string) => {
   const aboutURL = `https://www.reddit.com/r/${subreddit}/about.json`;
-  const response = await Promise.all([fetch(threadsURL), fetch(aboutURL)]);
-  if (!response[0].ok || !response[1].ok) {
-    throw new Error('Unable to fetch data.');
-  }
-  const json = await Promise.all([response[0].json(), response[1].json()]);
-  return [transformThreadsData(json[0]), transformSubredditData(json[1])];
+  const response = await fetch(aboutURL);
+  if (!response.ok) throw new Error(response.statusText || 'Unable to fetch data.');
+  const json = await response.json();
+  return transformSubredditBody(json);
 }
 
 export const fetchPopularSubreddits = async() => {
@@ -149,6 +167,100 @@ export const fetchPopularSubreddits = async() => {
   const response = await fetch(url);
   const json = await response.json();
   return json.data.children.map(({ data } : any) => data.display_name_prefixed);
+}
+
+/* Intact function
+
+export const searchUser = async (searchTerm: string) => {
+  const response = await Promise.all([
+    fetch(`https://www.reddit.com/user/${searchTerm}.json`),
+    fetch(`https://www.reddit.com/user/${searchTerm}/about.json`)
+  ]);
+  if (!response[0].ok || !response[1].ok) {
+    let msg;
+    switch (response[0].status) {
+      case 403:
+        msg = 'This account has been suspended';
+        break;
+      case 404:
+        msg = 'I cannot find an account that matches that username';
+        break;
+      default:
+        msg = 'Unable to retrieve data'
+    }
+    throw new Error(`${msg}. Status code: ${response[0].status}.`);
+  }
+
+  const json = await Promise.all([response[0].json(), response[1].json()]);
+  const posts = json[0].data.children.length ? json[0].data.children.map(({ data }: any) => {
+    return {
+        id: data.id,
+        newThread: data.title,
+        originalPost: data.link_title,
+        author: data.author,
+        body: data.body_html,
+        votes: data.ups - data.downs,
+        link: data.permalink,
+        subreddit: data.subreddit_name_prefixed
+    }
+  }) : [];
+
+  const profileData = {
+    icon: json[1].data.icon_img || json[1].data.subreddit.icon_img,
+    name: json[1].data.subreddit.display_name_prefixed || json[1].data.name,
+    karma: json[1].data.link_karma,
+    subscribers: json[1].data.subscribers,
+    banned: json[1].data.user_is_banned
+  };
+
+  return { posts, profileData };
+}*/
+
+export const searchUser = async ([after, before, count, username]: SearchUserPosts): Promise<SearchUserResponse> => {
+  const baseUrl = `https://www.reddit.com/user/${username}.json?limit=25`;
+
+  const queryString = !after && !before ? ''
+  : !after && before ? `&before=${before}&count=${count}`
+  : after && !before ? `&after=${after}&count=${count}`
+  : '';
+
+  const response = await Promise.all([
+    fetch(baseUrl + queryString),
+    fetch(`https://www.reddit.com/user/${username}/about.json`)
+  ]);
+  
+  const json = await Promise.all([response[0].json(), response[1].json()]);
+  console.log(json)
+  const posts: Post[] | [] = json[0].data.children.length ? json[0].data.children.map(({ data }: any) => {
+    return {
+        id: data.id,
+        newThread: data.title,
+        originalPost: data.link_title,
+        author: data.author,
+        body: data.body_html,
+        votes: data.ups - data.downs,
+        link: data.permalink,
+        subreddit: data.subreddit_name_prefixed
+    }
+  }) : [];
+
+  const profileData: ProfileData = {
+    icon: json[1].data.icon_img || json[1].data.subreddit.icon_img,
+    name: json[1].data.subreddit.display_name_prefixed || json[1].data.name,
+    karma: json[1].data.total_karma,
+    subscribers: json[1].data.subscribers,
+    banned: json[1].data.user_is_banned
+  };
+
+  return { 
+    posts,
+    profileData,
+    pagination : {
+        countOffset: count + 25,
+        afterQuery: json[0].data.after, 
+        beforeQuery: json[0].data.before
+    }
+  };
 }
 
 /* 
