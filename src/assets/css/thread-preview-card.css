@@ -40,6 +40,24 @@ a.external {
   color: orange
 }
 
+.user-link {
+  background: none;
+  color: orange;
+  margin: 0;
+  padding: 0 2px;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.user-link:hover {
+  scale: 1;
+  color: rgb(123, 123, 245)
+}
+
+.subreddit-link {
+  font-size: 16px
+}
+
 video {
   display: block;
   margin: 9px auto;
@@ -64,7 +82,7 @@ video {
   }
 
   h2:hover {
-    color: rgba(218, 214, 213, 0.563);
+    color: rgb(123, 123, 245)
   }
 }
 
