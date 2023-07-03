@@ -2,14 +2,13 @@
   width: auto;
   position: fixed;
   top: 50%;
-  /* transform: translate(-20%, -50%);
-  margin: 30px 0 0 60px; - original */
   transform: translate(0, -50%);
   margin: 20px 0 0 10px;
   max-height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 1; /* Switched from -1 */
+  padding-right: 9px;
 }
 
 header {
@@ -103,30 +102,6 @@ a.grow {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-
-/*
-I've moved these to global styles. Might want to delete these later! Thanks buddy.
-
-ul[name="search-results"] {
-  border-radius: 7px;
-  border: none;
-  padding: 0;
-  margin: 4px
-}
-
-.search-results {
-    background-color: whitesmoke;
-    color: black;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 3px 5px;
-    margin: 0
-}
-.search-results:hover, .popular:hover, .current {
-    background-color: rgb(255, 82, 3);
-    color: rgb(255, 255, 255);
-    cursor: pointer;
-} */
 
 .popular {
   display: block;

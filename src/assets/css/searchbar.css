@@ -27,7 +27,7 @@ input[type="text"] {
     z-index: 2;
 }
 
-input[type="submit"] {
+input[type="submit"], #users {
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
     border: 1px solid rgb(86, 82, 87);
@@ -38,6 +38,25 @@ input[type="submit"] {
     font-weight: 700;
     text-align: left;
     z-index: 2;
+}
+
+#users {
+  border-radius: 18px;
+  position: relative;
+  top: 18px;
+  left: 45%;
+  text-align: center;
+  padding: 3px;
+}
+
+#users:active {
+  scale: 0.8;
+  border: 2px solid white
+}
+
+input[type="submit"]:active {
+  background: rgb(0, 0, 0);
+  border: 1px solid gold
 }
 
 .rounded {

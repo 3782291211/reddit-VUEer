@@ -72,6 +72,7 @@ video {
 
 .flex {
   border-top: 1px solid gray;
+  margin-top: 15px;
   padding-top: 8px;
   display: flex;
 }
@@ -101,6 +102,11 @@ video {
   border-top: 2px solid gray;
   margin: 0 0 40px;
   padding-top: 5px
+}
+
+.subreddit-link {
+  padding: 3px 7px;
+  font-size: 19px;
 }
 
 .subtitle div {
