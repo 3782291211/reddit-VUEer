@@ -41,6 +41,7 @@ input {
   align-items: center;
 }
 
+
 h3, label {
     margin: 20px 1px 5px;
     font-weight: bold;
@@ -143,6 +144,14 @@ a.grow {
   width: 100%;
   background: rgba(0, 0, 0, 0.839);
   z-index: -1;
+}
+
+.search-users {
+  margin: -55px 0 55px;
+}
+
+.search-subreddits {
+  margin-top: 10px
 }
 
 @media (min-width: 1000px) {

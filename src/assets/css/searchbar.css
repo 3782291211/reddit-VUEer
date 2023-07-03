@@ -44,9 +44,10 @@ input[type="submit"], #users {
   border-radius: 18px;
   position: relative;
   top: 18px;
-  left: 45%;
+  left: 43%;
+  width: fit-content;
   text-align: center;
-  padding: 3px;
+  padding: 3px 15px 3px 10px;
 }
 
 #users:active {
@@ -128,7 +129,7 @@ ul {
 .mobileSearchbar form {
   min-width: 100%;
   position: static;
-  margin: 0 auto;
+  margin: 0 auto 0px;
 }
 .mobileSearchbar form input[type="text"] {
   width: 100%;
@@ -145,10 +146,16 @@ ul {
 
 .mobileSearchbar ul {
   position: relative;
-  margin: 0 auto;
+  margin: 0 auto -10px;
   padding-bottom: 5px;
   min-width: 99%;
   top: -10px;
+}
+
+.mobileSearchbar #users {
+  margin: 35px auto 10px;
+  width: 100%;
+  left: 0;
 }
 
 @media (max-width: 1000px) {
