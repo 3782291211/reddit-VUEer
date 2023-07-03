@@ -11,12 +11,18 @@
     left: 55%;
     top: 45%;
     text-align: center;
-    margin-bottom: -40px
+    margin-bottom: -40px;
 }
 
 @media (max-width: 1000px) {
   .spinner {
-    left: 39%;
-}
+    position: fixed;
+    width: 500px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -250px; 
+  }
 }
 </style>
