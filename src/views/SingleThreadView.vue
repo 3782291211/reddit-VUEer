@@ -24,7 +24,6 @@ const fetchData = (newParams: RouteParams | null) => {
     isLoading.value = false;
   })
   .catch(err => {
-    console.log(err);
     isLoading.value = false;
   })
 }
@@ -49,7 +48,7 @@ watch(() => route.params, params => {
       <h1>{{ data.title }}</h1>
 
       <div class="subtitle">
-        <h2>by <span>{{ data.author }}</span>, in <span>{{ data.sub }}</span></h2>
+        <h2>by <span>{{ data.author }}</span>, in <router-link class="subreddit-link" :to="`/${data.sub}`">{{ data.sub }}</router-link></h2>
         <div>
           <img class="svg-icon" src="../assets/icons/updown.svg">
           <span>{{ data.votes }} votes</span>
@@ -102,18 +101,4 @@ watch(() => route.params, params => {
   </main>
 </template>
 
-<style lang="css" scoped src="../assets/css/single-thread-view.css"> </style>
-
-<!-- onMounted(async () => {
-  isLoading.value = true;
-  const { subreddit, threadId, threadTitle } = route.params;
-  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
-  isLoading.value = false;
-});
-
-watch(() => route.params, async (params) => {
-  isLoading.value = true;
-  const { subreddit, threadId, threadTitle } = params;
-  data.value = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
-  isLoading.value = false;
-}); -->
+<style lang="css" scoped src="../assets/css/single-thread-view.css"></style>
