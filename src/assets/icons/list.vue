@@ -20,4 +20,10 @@ svg:hover {
   color: black;
   background-color: white;
 }
+
+@media (max-width: 500px) {
+  svg {
+    top: 12px;
+  }
+}
 </style>
