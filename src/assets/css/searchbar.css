@@ -12,7 +12,6 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 input[type="text"] {
@@ -25,6 +24,11 @@ input[type="text"] {
     border: 1px solid #e94f0db3;
     box-shadow: 0 0 10px 0 #e94f0db3;
     z-index: 2;
+}
+
+input[type="text"]:hover {
+  border: 1px solid white;
+  background-color: transparent;
 }
 
 input[type="submit"], #users {

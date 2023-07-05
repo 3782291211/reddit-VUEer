@@ -1,6 +1,7 @@
 ul {
     list-style: none;
     padding-left: 20px;
+    padding-bottom: 3px;
     margin: 8px 0;
 }
 .terminal-reply {

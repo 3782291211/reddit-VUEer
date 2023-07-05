@@ -18,6 +18,14 @@ header {
   left: 0
 }
 
+header svg {
+  position: absolute;
+  top: 18px;
+  left: 160px;
+  height: 30px;
+  color: #c5535e;
+}
+
 input {
   display: block;
   width: 98%;
@@ -73,21 +81,20 @@ ul[name="popular-subreddits"] {
 
 .router-links {
   display: flex;
-  flex-wrap: wrap
+  flex-wrap: wrap;
+  width: 260px;
+  justify-content: center;
 }
 
 .router-links a {
   flex-grow: 1;
+  width: 74px;
   text-align: center;
   margin: 6px;
   padding: 4px;
   border-radius: 7px;
   background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
   transition: transform 0.3s ease-in-out;
-}
-
-a.grow {
-  min-width: 45%;
 }
 
 .router-links a:active {
@@ -128,10 +135,6 @@ a.grow {
   left: 0;
   width: 100%;
   background-color: #15171c;
-}
-
-.banner h2 {
-  font-size: 1.5em;
 }
 
 .banner:before {
@@ -235,6 +238,18 @@ a.grow {
     right: 33px;
     bottom: 3px
 }
+}
+
+@media (max-width: 500px) {
+  header h2 {
+    font-size: 16px;
+  }
+
+  header svg {
+    left: 120px;
+    height: 20px;
+  }
+  
 }
 
 @media (hover: hover) {

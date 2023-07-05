@@ -2,6 +2,7 @@
   position: relative;
   top: 80px;
   overflow-x: auto;
+  padding-bottom: 50px;
 }
 
 .subredditThreads li {
@@ -57,7 +58,7 @@
 
   .subreddit-threads-title {
     width: 70%;
-    left: 30px;
+    left: 35px;
     margin: 0 auto 20px auto;
   }
 
