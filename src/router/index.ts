@@ -5,14 +5,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/search/:username?',
-      name: 'user',
-      component: UserView
+      path: '/',
+      redirect: { name: 'popular', params: { sortBy: 'popular' } }
     },
     {
-      path: '/:sortBy?',
+      path: '/:sortBy',
       name: 'popular',
       component: () => import('../views/PopularThreadsView.vue')
+    },
+    {
+      path: '/search',
+      name: 'user',
+      component: UserView
     },
     {
       path: '/r/:subreddit',
