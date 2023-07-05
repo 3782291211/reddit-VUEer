@@ -6,7 +6,7 @@ export const formatURL = (url: string): string | null => {
 }
 
 export const formatPermalink = (url: string) => {
-  return url.match(/r\/[^/]+\/comments\/[^/]+\/[^/]+\//)?.[0] || '';
+  return url.match(/r\/([^/]+)\/comments\/([^/]+)\/([^/]+)/) || '';
 }
 
 // (?:) creates a non-capturing group
