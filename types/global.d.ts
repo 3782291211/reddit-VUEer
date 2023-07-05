@@ -57,4 +57,37 @@ declare global {
     profileData: ProfileData,
     pagination: Pagination
   }
+
+  export type PaginateUserSeach = {
+    posts: Post[],
+    pagination: Pagination
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////
+  /* These 2 types are used for checking the number of replies within the NestedReplies component */
+
+  export type JsonComment = {
+    author: string,
+    body: string,
+    id: string,
+    numberOfReplies: number,
+    replies: {
+      kind: string,
+      data: {
+        [key: string]: any,
+        children: { 
+          kind: string,
+          data: { [key: string]: any }
+        }[]
+      }
+    },
+    title: string | undefined,
+    votes: number
+  }
+
+  export type SingleComment = { 
+    kind: string,
+    data: { 
+      [key: string]: any }
+    };
 }
