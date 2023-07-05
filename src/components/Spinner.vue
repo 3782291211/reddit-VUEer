@@ -1,10 +1,17 @@
 <template>
+  <div class="modal">
     <div class="spinner">
       <font-awesome-icon icon="spinner" spin spin-reverse size="2xl" />
     </div>
+  </div>
 </template>
 
 <style scoped>
+
+.modal {
+  backdrop-filter: blur(10px);
+  overflow: hidden
+}
 .spinner {
     font-size: 50px;
     position: fixed;
