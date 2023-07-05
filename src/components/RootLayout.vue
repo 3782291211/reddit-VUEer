@@ -71,6 +71,7 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]) => {
 <template>
   <header>
     <h2 class="banner">reddit VUEer</h2>
+    <router-link id="home" :to="{ path: '/' }"><font-awesome-icon icon="fa-solid fa-icons" beat-fade style="--fa-animation-duration: 3.5s"/></router-link>
     <SearchBar v-if="windowWidth > 1000"/>
   </header>
   <div class="menu-controls">
@@ -80,8 +81,9 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]) => {
   <section v-if="showMenu || windowWidth > 1000" id="feeds">
     <h3 class="filter">Filter threads</h3>
     <div class="router-links" id="router-links">
-      <router-link :class="[...activeClass('popular'), 'grow']" to="/popular">Popular</router-link>
-      <router-link :class="[...activeClass('top'), 'grow']" to="/top">Top</router-link>
+      <router-link :class="activeClass('popular')" :to="{name: 'popular', params: { sortBy: 'popular' }}">Popular</router-link>
+      <router-link :class="activeClass('top')" to="/top">Top</router-link>
+      <router-link :class="activeClass('rising')" to="/rising">Rising</router-link>
       <router-link :class="activeClass('hot')" to="/hot">Hot</router-link>
       <router-link :class="activeClass('new')" to="/new">New</router-link>
       <router-link :class="activeClass('best')" to="/best">Best</router-link>
