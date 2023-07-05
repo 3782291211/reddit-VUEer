@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <div class="pagination">
     <img v-if="pagination.countOffset > 25" @click="$emit('handlePagination', $event)" name="previous" class="arrow" src="@/assets/images/left.svg"/>
-    <img @click="$emit('handlePagination', $event)" name="next" class="arrow" src="@/assets/images/right.svg"/>
+    <img v-if="pagination.afterQuery"  @click="$emit('handlePagination', $event)" name="next" class="arrow" src="@/assets/images/right.svg"/>
   </div>
 </template>
 
