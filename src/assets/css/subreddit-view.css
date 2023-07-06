@@ -1,0 +1,93 @@
+.subreddit-view {
+  position: relative;
+  top: 90px;
+  width: 65%;
+  margin-left: 310px !important;
+}
+
+.thread-description {
+  overflow-x: auto;
+}
+
+h1 {
+  font-weight: 900;
+  z-index: 1;
+  color: whitesmoke;
+  margin: 25px auto 30px;
+}
+
+h2 {
+  z-index: 1;
+  margin: 0;
+  padding: 0 15px;
+  font-weight: bold;
+  font-size: 16px
+}
+
+.flex {
+  justify-content: center;
+  margin: -10px 0 10px;
+}
+
+.borderLeft {
+  border-left: 2px solid gray
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  height: 280px;
+  margin: 0 0 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.overlay:before {
+  content: " ";
+  display: block;
+  position: absolute;   
+  height: 280px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.706);
+  z-index: 1;
+  box-shadow: 0 0 30px 30px #1E2129 inset;
+}
+.overlay * {
+  position: relative;
+}
+
+.icon, .header-img {
+  border-radius: 5px;
+  height: 40px;
+  width: auto;
+  margin: 0 auto;
+  z-index: 1
+}
+
+.icon {
+  border-radius: 50%;
+  border: 1px solid rgba(58, 54, 54, 0.685);
+  box-shadow: 0 0 5px 2px rgba(71, 65, 65, 0.724);
+}
+
+.header-img {
+  height: 60px
+}
+
+@media (max-width: 1000px) {
+  .subreddit-view {
+    width: 95%;
+    margin: 0 auto !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .subreddit-view {
+    top: 70px;
+    overflow-x: auto;
+  }
+}

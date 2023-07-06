@@ -1,0 +1,18 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "types"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "strict": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./src/*", "./src/utils"]
+    },
+    "lib": [
+      "ES2021.String", "ES2015", "ES2017", "dom"
+    ],
+    "types": ["node"]
+  }
+}

@@ -1,0 +1,283 @@
+main {
+  position: relative;
+  top: 120px;
+  width: 65%;
+  margin-left: 320px !important;
+  overflow-x: auto;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+h1 {
+  margin-bottom: 15px
+}
+
+.comments-heading {
+  border-top: 2px solid rgba(128, 128, 128, 0.49);
+  margin: 20px 0 -5px;
+  padding-top: 5px
+}
+
+.op {
+  background-color: black;
+  color: white
+}
+
+a.external {
+  display: block;
+  width: fit-content;
+  margin: -10px 0 40px;
+  color: orange;
+}
+
+.user-link {
+  text-decoration: underline;
+  color: rgb(246, 165, 95);
+}
+
+a.external:hover, .user-link:hover {
+  background-color: rgb(251, 200, 92);
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: black;
+}
+
+.user-link:hover {
+  padding: 4px 6px
+}
+
+span {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.svg-icon {
+  display: inline;
+  margin: -3px 4px;
+}
+
+.preview-img, .gallery-img {
+  max-height: 500px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.preview-img {
+  margin: 35px auto 15px;
+}
+
+.limitHeight {
+  max-height: 200px;
+}
+
+figure {
+  height: auto;
+  max-height: 500px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(6px);
+}
+
+.gallery-img {
+  height: auto;
+  width: auto;
+  margin: auto;
+}
+
+.gallery-buttons {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 1;
+  transform: translate(-50%);
+  background-color: #00000085;
+  width: 100%;
+  padding-top: 5px;
+}
+
+/* Transition group for gallery images */
+.gallery-move, /* apply transition to moving elements */
+.gallery-enter-active,
+.gallery-leave-active {
+  transition: all 0.5s ease;
+}
+
+.gallery-enter-from,
+.gallery-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.gallery-leave-active {
+  position: absolute;
+}
+/********************/
+
+iframe {
+  width: auto
+}
+
+video {
+  display: block;
+  width: 100%;
+  max-height: 600px;
+  margin: 0 auto
+}
+
+svg {
+  height: 30px;
+  color: #db6937;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  margin: 5px
+}
+
+svg:hover {
+  scale: 1.1
+}
+
+.float {
+  float: right;
+}
+
+.inline {
+  display: inline;
+  padding: 0;
+  margin-right: 15px
+}
+
+.flex {
+  border-top: 1px solid gray;
+  margin-top: 15px;
+  padding-top: 8px;
+  display: flex;
+}
+
+.caption {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: -30px auto 0;
+}
+
+.caption p {
+  margin-top: -15px;
+  position: relative;
+  top: 44px;
+  z-index: 2;
+  background-color: rgb(0, 0, 0);
+  width: 100%;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px solid rgba(128, 128, 128, 0.49);
+  margin: 0 0 20px;
+  padding-top: 9px
+}
+
+.comment-author {
+  display: inline-block;
+  color: rgb(32, 32, 90);
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.comment-author:hover {
+  background-color: rgb(251, 200, 92);
+  color: rgb(45, 45, 90);
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+.subreddit-link {
+  padding: 3px 7px;
+  font-size: 19px;
+}
+
+.subtitle div {
+  min-width: 100px;
+  text-align: right;
+  padding-right: 4px
+}
+
+.embed {
+  display: flex;
+  justify-content: center;
+}
+
+h3 {
+    color: black;
+    background-color: whitesmoke;
+    padding: 5px 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+li:not(li[name="gallery-img"]) {
+    border: 1px solid gray;
+    margin: 20px auto;
+    border-radius: 6px;
+}
+
+.thread-description {
+  margin-bottom: 15px;
+}
+
+.comment-body {
+    padding: 10px;
+    background-color: #15171c;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.478);
+    border-radius: 7px;
+}
+
+.no-comments {
+  margin: 10px 0;
+}
+
+li p {
+    padding: 0 10px
+}
+
+@media (max-width: 1000px) {
+  main {
+    width: 95%;
+    margin: 0 auto 50px !important;
+    top: 100px;
+  }
+}
+
+@media (max-width: 400px) {
+  .subtitle {
+    font-size: 10px
+  }
+
+  h1 {
+    font-size: 18px
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+  
+  a.subreddit-link {
+    font-size: 14px
+  }
+  
+  video {
+    max-height: 300px
+  }
+}

@@ -1,0 +1,103 @@
+.homepageThreads {
+  position: relative;
+  top: 80px;
+  overflow-x: auto;
+  padding-bottom: 50px;
+}
+
+.subredditThreads li {
+  width: 100%;
+}
+
+.subredditThreads h1 {
+  margin-left: 5px;
+}
+
+.subreddit-threads-ul {
+  padding: 0;
+}
+
+.subreddit-threads-title {
+  position: relative;
+  top: 45px;
+  margin: 0 auto 20px 25px;
+  font-weight: 900;
+  z-index: -1
+}
+
+.arrow {
+  display: inline;
+  height: 45px;
+  width: 45px;
+  padding: 5px;
+  transition: padding 0.2s ease-in-out;
+  margin: 0 5px
+}
+
+.arrow:hover {
+  padding: 0;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0 -10px
+}
+
+.subredditPagination {
+  margin-top: 60px
+}
+
+@media (min-width: 1000px) {
+  .homepageThreads {
+    margin-left: 160px;
+  }
+
+  .subredditThreads {
+    margin-left: -40px;
+  }
+
+  li {
+    width: 70%
+  }
+
+  .subreddit-threads-title {
+    width: 70%;
+    left: 35px;
+    margin: 0 auto 20px auto;
+  }
+
+  .subredditThreads h1 {
+    width: 97%
+  }
+
+  ul {
+    margin-left: 40px;
+  }
+
+  .pagination {
+    margin: -10px 0
+  }
+
+  .subredditPagination {
+    margin-top: 60px
+  }
+}
+
+@media (max-width: 500px) {
+  .subreddit-threads-title {
+    top: 10px;
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+    width: fit-content;
+  }
+
+  .subredditThreads h1 {
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .subredditPagination {
+    margin-top: 25px
+  }
+}
