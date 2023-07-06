@@ -10,7 +10,7 @@
 }
 
 .subredditThreads h1 {
-  margin-left: 5px
+  margin-left: 5px;
 }
 
 .subreddit-threads-ul {
@@ -43,6 +43,10 @@
   margin: 20px 0 -10px
 }
 
+.subredditPagination {
+  margin-top: 60px
+}
+
 @media (min-width: 1000px) {
   .homepageThreads {
     margin-left: 160px;
@@ -73,6 +77,10 @@
   .pagination {
     margin: -10px 0
   }
+
+  .subredditPagination {
+    margin-top: 60px
+  }
 }
 
 @media (max-width: 500px) {
@@ -86,7 +94,10 @@
 
   .subredditThreads h1 {
     margin-top: 20px;
-    text-align: center;
     width: 100%;
+  }
+
+  .subredditPagination {
+    margin-top: 25px
   }
 }

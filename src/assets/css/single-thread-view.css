@@ -16,7 +16,7 @@ h1 {
 }
 
 .comments-heading {
-  border-top: 1px solid gray;
+  border-top: 2px solid rgba(128, 128, 128, 0.49);
   margin: 20px 0 -5px;
   padding-top: 5px
 }
@@ -28,8 +28,25 @@ h1 {
 
 a.external {
   display: block;
-  margin: -10px auto 40px;
+  width: fit-content;
+  margin: -10px 0 40px;
   color: orange;
+}
+
+.user-link {
+  text-decoration: underline;
+  color: rgb(246, 165, 95);
+}
+
+a.external:hover, .user-link:hover {
+  background-color: rgb(251, 200, 92);
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: black;
+}
+
+.user-link:hover {
+  padding: 4px 6px
 }
 
 span {
@@ -43,14 +60,23 @@ span {
 }
 
 .preview-img, .gallery-img {
-  max-height: 600px;
-  border-radius: 7px;
+  max-height: 550px;
   display: block;
-  margin: 20px auto;
+  margin: 35px auto 20px;
+  position: relative;
+  z-index: 1;
 }
 
-.preview-img {
-  margin-top: 30px
+.gallery-buttons {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  bottom: 70px
+}
+
+figure {
+  max-height: 550px;
+  margin-bottom: 40px;
 }
 
 iframe {
@@ -62,6 +88,19 @@ video {
   width: 100%;
   max-height: 600px;
   margin: 0 auto
+}
+
+svg {
+  height: 30px;
+  color: #db6937;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  margin: 5px
+}
+
+svg:hover {
+  scale: 1.1
 }
 
 .float {
@@ -85,7 +124,6 @@ video {
   text-align: center;
   display: flex;
   flex-direction: column;
-  width: fit-content;
   margin: -30px auto 0;
 }
 
@@ -103,9 +141,9 @@ video {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 2px solid gray;
-  margin: 0 0 30px;
-  padding-top: 5px
+  border-top: 2px solid rgba(128, 128, 128, 0.49);
+  margin: 0 0 20px;
+  padding-top: 9px
 }
 
 .comment-author {
@@ -154,8 +192,9 @@ li:not(li[name="gallery-img"]) {
 }
 
 .thread-description {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
+
 .comment-body {
     padding: 10px;
     background-color: #15171c;
@@ -183,4 +222,9 @@ li p {
   .subtitle {
     font-size: 10px
   }
+
+  figure {
+    margin-bottom: -40px
+  }
+
 }

@@ -228,10 +228,14 @@ ul[name="popular-subreddits"] {
     margin: -2px 0;
   }
 
+  .router-links {
+    width: 100%
+  }
+
   .router-links a {
     display: inline-block;
     margin: 4px;
-    width: 90px;
+    width: 100px
   }
 
   .icon {

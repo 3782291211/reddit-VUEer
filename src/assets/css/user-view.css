@@ -109,6 +109,11 @@ li {
     transition: background-color 0.3s linear, color 0.3s linear, padding 0.3s linear;
 }
 
+.white {
+    color: whitesmoke;
+    font-weight: 500;
+}
+
 .new-thread {
     width: fit-content;
     margin: 10px 0 5px 0;
@@ -123,7 +128,7 @@ li {
 
 .op {
     line-height: 1.6;
-    padding-top: 2px
+    padding-top: 2px;
 }
 
 .subreddit-link {
@@ -145,6 +150,16 @@ li {
 .no-results {
     text-align: center;
     font-size: 18px
+}
+
+.comment-icon {
+    margin: 0 8px -1px 4px;
+    color: orange
+}
+
+.thread-icon {
+    margin: 5px 8px 0 3px;
+    color: white;
 }
 
 @media (max-width: 1000px) {

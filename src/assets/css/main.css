@@ -97,7 +97,7 @@ li.thread-preview:hover {
   scale: 0.9
 }
 
-#router-links a.currentSort {
+#router-links a.currentSort, a.not-found {
   color: red;
   display: block;
   background: white;
@@ -151,18 +151,18 @@ img {
 .image-bg {
   position: relative;
   width: 100%;
-  margin: 0 auto 10px;
-  border-radius: 10px;
+  /* margin: 0 auto 10px; */
+  border-radius: 7px;
 }
 
 .image-bg:before {
   content: " ";
   display: block;
-  position: absolute;   
+  position: absolute;
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   z-index: 1;
   backdrop-filter: blur(6px);
-  border-radius: 10px;
+  border-radius: 7px;
 }
