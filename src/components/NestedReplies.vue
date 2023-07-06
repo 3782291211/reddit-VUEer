@@ -29,7 +29,7 @@ const showExpandButton = (reply: CommentData): boolean => {
       <div v-if="reply.data.body_html" class="terminal-reply">
         <div class="reply-header">
           <plusOrMinus v-if="showExpandButton(reply)" :id="reply.data.id" @click="toggleReplies(reply.data.id)" :shape="showReplies[reply.data.id] ? 'minus' : 'plus'"/>
-          <p class="nested-author">{{ reply.data.author }}</p>
+          <p class="nested-author"><router-link class="user-link" :to="{ path: '/search', query: { username: reply.data.author } }">{{ reply.data.author }}</router-link></p>
         </div>
         <article v-html="formatHTML(reply.data.body_html)"></article>
       </div>

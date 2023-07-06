@@ -6,16 +6,16 @@
 
 <style scoped>
 svg {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   fill: #ffffff;
-  margin: 10px auto -10px
+  margin: 10px 13px -8px
 }
 
 @media (max-width: 700px) {
   svg {
-    height: 25px;
-    width: 25px;
+    height: 20px;
+    width: 20px;
   } 
 }
 </style>

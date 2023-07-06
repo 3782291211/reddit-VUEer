@@ -151,8 +151,6 @@ img {
 .image-bg {
   position: relative;
   width: 100%;
-  /* margin: 0 auto 10px; */
-  border-radius: 7px;
 }
 
 .image-bg:before {
@@ -164,5 +162,4 @@ img {
   background: rgba(0, 0, 0, 0.6);
   z-index: 1;
   backdrop-filter: blur(6px);
-  border-radius: 7px;
 }

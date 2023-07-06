@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { onMounted, ref, Ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import type { Ref } from 'vue';
 import { searchUser } from '@/utils/apiRequests';
 import ErrorModal from '@/components/ErrorModal.vue';
 import { useRoute, useRouter } from 'vue-router';

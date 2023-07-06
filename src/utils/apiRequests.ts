@@ -141,7 +141,9 @@ export const searchUser = async (username: string): Promise<SearchUserResponse> 
     name: json[1].data.subreddit.display_name_prefixed || json[1].data.name,
     karma: json[1].data.total_karma,
     subscribers: json[1].data.subscribers,
-    banned: json[1].data.subreddit.user_is_banned
+    banned: json[1].data.subreddit.user_is_banned,
+    isPremium: json[1].data.is_gold,
+    isVerified: json[1].data.verified
   };
 
   return { 

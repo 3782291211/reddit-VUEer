@@ -318,6 +318,8 @@ declare global {
         total_karma: number,
         subscribers: number,
         name: string,
+        is_gold: boolean,
+        verified: boolean,
         icon_img: stringOrNull,
         subreddit: {
           icon_img: stringOrNull,
@@ -367,6 +369,8 @@ declare global {
     karma: number,
     subscribers: number | null,
     banned: null | string | boolean,
+    isPremium: boolean,
+    isVerified: boolean
   }
 
   export type SearchUserPosts = [stringOrNull, stringOrNull, number, string];

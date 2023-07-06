@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { searchSubreddits } from '@/utils/apiRequests';
 import { fetchPopularSubreddits } from '../utils/apiRequests';
 import { useRoute } from 'vue-router';

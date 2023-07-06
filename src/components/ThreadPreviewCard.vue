@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
-import { computed, ComputedRef, Ref, ref } from 'vue';
+import { computed, ref } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { formatHTML } from '../utils/formatHTML';
 import { formatURL } from '../utils/formatURL';
 

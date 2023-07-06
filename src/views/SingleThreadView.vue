@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import type { Ref } from 'vue';
-import { RouteParams } from 'vue-router';
+import type { RouteParams } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { fetchSingleThread } from '@/utils/apiRequests';
 import Spinner from '../components/Spinner.vue';

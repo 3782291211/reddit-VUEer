@@ -60,24 +60,67 @@ span {
 }
 
 .preview-img, .gallery-img {
-  max-height: 550px;
+  max-height: 500px;
   display: block;
-  margin: 35px auto 20px;
   position: relative;
   z-index: 1;
+}
+
+.preview-img {
+  margin: 35px auto 15px;
+}
+
+.limitHeight {
+  max-height: 200px;
+}
+
+figure {
+  height: auto;
+  max-height: 500px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(6px);
+}
+
+.gallery-img {
+  height: auto;
+  width: auto;
+  margin: auto;
 }
 
 .gallery-buttons {
   display: flex;
   justify-content: center;
-  position: relative;
-  bottom: 70px
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 1;
+  transform: translate(-50%);
+  background-color: #00000085;
+  width: 100%;
+  padding-top: 5px;
 }
 
-figure {
-  max-height: 550px;
-  margin-bottom: 40px;
+/* Transition group for gallery images */
+.gallery-move, /* apply transition to moving elements */
+.gallery-enter-active,
+.gallery-leave-active {
+  transition: all 0.5s ease;
 }
+
+.gallery-enter-from,
+.gallery-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.gallery-leave-active {
+  position: absolute;
+}
+/********************/
 
 iframe {
   width: auto
@@ -128,13 +171,12 @@ svg:hover {
 }
 
 .caption p {
-  margin-top: -25px;
+  margin-top: -15px;
   position: relative;
   top: 44px;
+  z-index: 2;
   background-color: rgb(0, 0, 0);
   width: 100%;
-  border-top-right-radius: 7px;
-  border-top-left-radius: 7px;
 }
 
 .subtitle {
@@ -223,8 +265,19 @@ li p {
     font-size: 10px
   }
 
-  figure {
-    margin-bottom: -40px
+  h1 {
+    font-size: 18px
   }
 
+  h2 {
+    font-size: 16px;
+  }
+  
+  a.subreddit-link {
+    font-size: 14px
+  }
+  
+  video {
+    max-height: 300px
+  }
 }

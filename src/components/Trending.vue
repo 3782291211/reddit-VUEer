@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { fetchTrendingThreads } from '@/utils/apiRequests';
-import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { formatRouteDescriptor } from '@/utils/formatRouteDescriptor';
 
 const trendingThreads: Ref<Thread[] | []> = ref([]);

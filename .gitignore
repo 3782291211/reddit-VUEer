@@ -29,3 +29,5 @@ coverage
 
 scrap
 cypress
+# Local Netlify folder
+.netlify

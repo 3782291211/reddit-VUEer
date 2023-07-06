@@ -18,6 +18,18 @@ ul {
   display: inline-block;
 }
 
+.user-link {
+  text-decoration: underline;
+  color: whitesmoke;
+}
+
+.user-link:hover {
+  background-color: rgb(251, 200, 92);
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: black;
+}
+
 ul {
   margin: 0;
 }

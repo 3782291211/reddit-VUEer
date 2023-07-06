@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { fetchSubredditBody } from '@/utils/apiRequests';
-import { computed, ComputedRef, onMounted, ref, Ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { useRoute } from 'vue-router';
 import { formatHTML } from '@/utils/formatHTML';
 import Spinner from '../components/Spinner.vue';

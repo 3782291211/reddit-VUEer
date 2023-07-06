@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteLocationNormalized, Router } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
+import type { Router, RouteLocationNormalized } from 'vue-router';
 import UserView from '@/views/UserView.vue';
 
 const router: Router = createRouter({

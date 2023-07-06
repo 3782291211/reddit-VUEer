@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { watch, ref, Ref, onMounted, onUnmounted, computed } from 'vue';
+import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
+import type { Ref } from 'vue';
 import { searchThreads } from '@/utils/apiRequests';
 import { useRoute } from 'vue-router';
 

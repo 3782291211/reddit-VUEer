@@ -5,7 +5,8 @@ import hearts from '@/assets/icons/hearts.vue';
 import { formatHTML } from '@/utils/formatHTML';
 import { formatRouteDescriptor } from '@/utils/formatRouteDescriptor';
 import { removeEntities } from '@/utils/removeEntities';
-import { computed, ComputedRef } from 'vue';
+import { computed } from 'vue';
+import type { ComputedRef } from 'vue';
 
 const props = defineProps<{
     userProfileData: ProfileData,
@@ -29,11 +30,12 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
 
     <div class="profile">
       <div>
-        <h3>{{ userProfileData.name }}</h3>
+        <h3><hearts/>{{ userProfileData.name }}</h3>
         <div class="flex">
           <p>Karma: {{ userProfileData.karma }}</p>
-          <p>Subscribers: {{ userProfileData.subscribers || 0 }}</p>
-          <hearts/>
+          <p v-if="userProfileData.subscribers">Subscribers: {{ userProfileData.subscribers }}</p>
+          <p v-if="userProfileData.isVerified"><font-awesome-icon icon="fa-solid fa-circle-check" style="color: #59d936; margin-right: 5;"/>Verified</p>
+          <p v-if="userProfileData.isPremium"><font-awesome-icon icon="fa-solid fa-money-bills" style="color: #ead75d; margin-right: 5;"/>Premium member</p>
         </div>
         <p v-if="userProfileData.banned">User is banned.</p>
       </div>
