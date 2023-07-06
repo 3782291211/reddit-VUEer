@@ -4,18 +4,18 @@ import { searchThreads } from '@/utils/apiRequests';
 import { useRoute } from 'vue-router';
 
 const searchTerm = ref('');
-const searchResults: Ref<any[]> = ref([]);
+const searchResults: Ref<SearchThreadsResponse | []> = ref([]);
 const showResults = ref(true);
 const isLoading = ref(false);
 const showAlert = ref(false);
-const alertID: Ref<NodeJS.Timeout | null> = ref(null);
+const alertID: Ref<ReturnType<typeof setTimeout> | null> = ref(null);
 const route = useRoute();
 
 const handleSubmit = async () => {
-  showResults.value = true;
   isLoading.value = true;
   searchResults.value = await searchThreads(searchTerm.value);
   isLoading.value = false;
+  showResults.value = true;
   searchTerm.value = ''
 
   if(!searchResults.value.length) {
@@ -33,7 +33,7 @@ const handleClick = (e: Event) => {
 
 onMounted(() => document.addEventListener('click', handleClick));
 onUnmounted(() => document.removeEventListener('click', handleClick));
-onUnmounted(() => clearTimeout(alertID.value as NodeJS.Timeout));
+onUnmounted(() => clearTimeout(alertID.value as ReturnType<typeof setTimeout>));
 
 watch(() => route.path, () => showResults.value = false);
 
