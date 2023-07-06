@@ -9,14 +9,13 @@ import UserProfileAndPosts from '../components/UserProfileAndPosts.vue';
 
 const route = useRoute();
 const router = useRouter();
-const searchTerm = ref('');
-const userPosts: Ref<any[]> = ref([]);
-const userProfileData: Ref<any | null> = ref(null);
-const noResults = ref(false);
-const isLoading = ref(false);
-const errorMsg = ref('');
-const imgSrc = ref('');
-
+const searchTerm: Ref<string> = ref('');
+const userPosts: Ref<Post[] | []> = ref([]);
+const userProfileData: Ref<ProfileData | null> = ref(null);
+const noResults: Ref<boolean> = ref(false);
+const isLoading: Ref<boolean> = ref(false);
+const errorMsg: Ref<string> = ref('');
+const imgSrc: Ref<string> = ref('');
 const pagination: Ref<Pagination> = ref({
   afterQuery: null,
   beforeQuery: null,
@@ -50,7 +49,7 @@ watch(() => route.query?.username, async toQuery => {
   fetchUserData(toQuery as string);
 });
 
-const fetchUserData = async (username: string) => {
+const fetchUserData = async (username: string): Promise<void> => {
   try {
     isLoading.value = true;
     const { posts, profileData, pagination: latestPagination } = await searchUser(username);
