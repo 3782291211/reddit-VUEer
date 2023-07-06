@@ -5,18 +5,18 @@ import hearts from '@/assets/icons/hearts.vue';
 import { formatHTML } from '@/utils/formatHTML';
 import { formatRouteDescriptor } from '@/utils/formatRouteDescriptor';
 import { removeEntities } from '@/utils/removeEntities';
-import { computed } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 const props = defineProps<{
-    userProfileData: any,
-    userPosts: any,
-    pagination: any,
+    userProfileData: ProfileData,
+    userPosts: Post[],
+    pagination: Pagination,
     noResults: boolean,
     searchTerm: string
 }>();
 
-const showPagination = computed(() => {
-  return props.pagination.afterQuery || props.pagination.beforeQuery;
+const showPagination: ComputedRef<boolean> = computed(() => {
+  return !!props.pagination.afterQuery || !!props.pagination.beforeQuery;
 });
 
 const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
@@ -32,6 +32,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
         <h3>{{ userProfileData.name }}</h3>
         <div class="flex">
           <p>Karma: {{ userProfileData.karma }}</p>
+          <p>Subscribers: {{ userProfileData.subscribers || 0 }}</p>
           <hearts/>
         </div>
         <p v-if="userProfileData.banned">User is banned.</p>
@@ -46,7 +47,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
         <li class="thread-preview" v-for="comment in userPosts" :key="comment.id">
           <template v-if="comment.body">
             <div class="post-header">
-              <p class="op">Replied to &quot;<router-link :to="formatRouteDescriptor('thread', comment.link)" class="title">{{ comment.originalPost }}</router-link>&quot;</p>
+              <p class="op"><font-awesome-icon class="comment-icon" icon="fa-solid fa-comment-dots" />Replied to &quot;<router-link :to="formatRouteDescriptor('thread', comment.link)" class="title">{{ comment.originalPost }}</router-link>&quot;</p>
               <router-link :to="formatRouteDescriptor('subreddit', comment.link)" class="subreddit-link">{{ comment.subreddit }}</router-link>
             </div>
             <p>{{ comment.author }} wrote:</p>
@@ -55,10 +56,10 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
 
           <template v-else>
             <div class="post-header">
-              <p class="op-no-border">{{ comment.author }} posted a new thread in {{ comment.subreddit }}</p>
+              <p class="op-no-border"><font-awesome-icon class="thread-icon" icon="fa-solid fa-file-circle-plus" />{{ comment.author }} posted a new thread in {{ comment.subreddit }}</p>
               <router-link :to="formatRouteDescriptor('subreddit', comment.link)" class="subreddit-link">{{ comment.subreddit }}</router-link>
             </div>
-            <p class="new-thread"><router-link :to="formatRouteDescriptor('thread', comment.link)" class="title">{{ removeEntities(comment.newThread) }}</router-link></p>
+            <p class="new-thread"><router-link :to="formatRouteDescriptor('thread', comment.link)" class="title white">{{ removeEntities(comment.newThread as string) }}</router-link></p>
         </template>
       </li>
     </ul>

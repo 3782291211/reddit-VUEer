@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, Ref, watch } from 'vue';
+import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref, watch } from 'vue';
 import { searchSubreddits } from '@/utils/apiRequests';
 import { fetchPopularSubreddits } from '../utils/apiRequests';
 import { useRoute } from 'vue-router';
@@ -7,15 +7,15 @@ import list from '../assets/icons/list.vue';
 import close from '../assets/icons/close.vue';
 import SearchBar from '../components/SearchBar.vue';
 
-const searchResults: Ref<string[]> = ref([]);
-const popularSubreddits: Ref<any> = ref([]);
+const route = useRoute();
+const searchResults: Ref<string[] | []> = ref([]);
+const popularSubreddits: Ref<string[] | []> = ref([]);
 const searchTerm: Ref<string> = ref('');
 const isLoading: Ref<boolean> = ref(false);
 const inputIsBlurred: Ref<boolean> = ref(true);
 const activeParam: Ref<string> = ref('');
 const showMenu = ref(false);
-const windowWidth = ref(window.innerWidth);
-const route = useRoute();
+const windowWidth: Ref<number> = ref(window.innerWidth);
 
 onMounted(async () => {
   popularSubreddits.value = await fetchPopularSubreddits();
@@ -36,14 +36,14 @@ watch(() => route.params, toParam => {
   showMenu.value = false;
 })
 
-const noResults = computed(() => {
-    return searchTerm.value 
+const noResults: ComputedRef<boolean> = computed(() => {
+    return Boolean(searchTerm.value 
     && !searchResults.value.length 
-    && !inputIsBlurred.value;
+    && !inputIsBlurred.value);
 })
 
-const showSearchResults = computed(() => {
-  return searchResults.value.length && !inputIsBlurred.value;
+const showSearchResults: ComputedRef<boolean> = computed(() => {
+  return Boolean(searchResults.value.length && !inputIsBlurred.value);
 });
 
 const activeClass = (urlPathFragment: string) => {
@@ -54,7 +54,7 @@ const activeClass = (urlPathFragment: string) => {
 }
 
 const handleBlur = (e: FocusEvent) => {
-  const targetName = (e.relatedTarget as any)?.name;
+  const targetName: string = (e.relatedTarget as any)?.name;
   if (targetName === "link") return;
   inputIsBlurred.value = true;
 }

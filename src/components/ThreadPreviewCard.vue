@@ -1,16 +1,15 @@
 <script setup lang="ts">
 
-import { computed, ref } from 'vue';
+import { computed, ComputedRef, Ref, ref } from 'vue';
 import { formatHTML } from '../utils/formatHTML';
 import { formatURL } from '../utils/formatURL';
 
-const { item } = defineProps<{ item: Subreddit }>();
+const { item } = defineProps<{ item: Thread }>();
 
-const showImage = ref(true);
-const showThumbnail = ref(true);
-const thumbnailSrc = computed(() => {
-  return !showImage && !item.media && showThumbnail;
-})
+const showImage: Ref<boolean> = ref(true);
+const showThumbnail: Ref<boolean> = ref(true);
+const thumbnailSrc: ComputedRef<boolean> = 
+    computed(() => !showImage && !item.media && showThumbnail);
 
 </script>
 
@@ -21,8 +20,7 @@ const thumbnailSrc = computed(() => {
   <article>
     <div class="author-votes">
       <p class="subreddit">
-        By 
-        <!-- <router-link class="user-link" :to="`/search/${item.author}`">{{ item.author }}</router-link> -->
+        By
         <router-link class="user-link" :to="{ path: '/search', query: { username: item.author } }">{{ item.author }}</router-link>
         in 
         <router-link class="subreddit-link" :to="{name: 'subreddit', params: { subreddit: item.subreddit.slice(2) }}">{{ item.subreddit }}</router-link>

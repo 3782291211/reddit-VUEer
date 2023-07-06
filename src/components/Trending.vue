@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { fetchTrendingThreads } from '@/utils/apiRequests';
-import { computed, onMounted, onUnmounted, ref, Ref } from 'vue';
+import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from 'vue';
 import { formatRouteDescriptor } from '@/utils/formatRouteDescriptor';
 
-const trendingThreads: Ref<any> = ref([]);
-const currentIndex = ref(0);
+const trendingThreads: Ref<Thread[] | []> = ref([]);
+const currentIndex: Ref<number> = ref(0);
 const intervalId: Ref<ReturnType<typeof setInterval> | null> = ref(null);
-const intervalIsPaused = ref(false);
+const intervalIsPaused: Ref<boolean> = ref(false);
 
 onMounted(async () => {
     trendingThreads.value = await fetchTrendingThreads();
@@ -19,7 +19,8 @@ onUnmounted(() => {
   clearInterval(intervalId.value as ReturnType<typeof setInterval>);
 })
 
-const nextIndex = computed(() => Math.abs(currentIndex.value) % trendingThreads.value.length);
+const nextIndex: ComputedRef<number> = 
+    computed(() => Math.abs(currentIndex.value) % trendingThreads.value.length);
 
 </script>
 
@@ -37,7 +38,9 @@ const nextIndex = computed(() => Math.abs(currentIndex.value) % trendingThreads.
         <li v-for="i in [currentIndex]" :key="i">
 
           <router-link :to="formatRouteDescriptor('thread', trendingThreads[nextIndex].url)">
-            <img :src=" trendingThreads[nextIndex].src" class="trending-image"/>
+            <div class="image-bg" :style="{ backgroundImage: `url(${trendingThreads[nextIndex].src})`}">
+              <img :src=" trendingThreads[nextIndex].src" class="trending-image"/>
+            </div>
           </router-link>
 
           <div class="trending-info">

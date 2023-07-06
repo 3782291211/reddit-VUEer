@@ -10,20 +10,18 @@ import Pagination from '@/components/Pagination.vue';
 import ErrorModal from '../components/ErrorModal.vue';
 import { useRoute } from 'vue-router';
 
-const props = defineProps<{
-    viewType: string
-}>();
+const props = defineProps<{ viewType: string }>();
+const emit = defineEmits<{ (e: 'disableErrorModal'): void }>();
 
 const route = useRoute();
-const isLoading = ref(false);
-const errorMsg = ref('');
+const threads: Ref<Thread[] | []> = ref([]);
+const isLoading: Ref<boolean> = ref(false);
+const errorMsg: Ref<string> = ref('');
 const pagination: Ref<Pagination> = ref({
   afterQuery: null,
   beforeQuery: null,
   countOffset: 0
 });
-
-const threads: Ref<Subreddit []> = ref([]);
 
 const fetchData = async (currentParam: string) => {
   isLoading.value = true;
@@ -39,6 +37,7 @@ const fetchData = async (currentParam: string) => {
     threads.value = response.popularThreads;
     pagination.value = response.pagination;
   } catch (err: unknown) {
+    emit('disableErrorModal');
     errorMsg.value = (err as Error).message || 'Unable to process your request.';
   } finally {
     isLoading.value = false;
@@ -63,7 +62,7 @@ watch(() => route.params, async newParam => {
 
 const handlePagination = async (e: MouseEvent): Promise<void> => {
   isLoading.value = true;
-  const response = await paginate(
+  const response: PopularThreadsResponse | null = await paginate(
     pagination.value, 
     e, 
     route.params.sortBy as string,
@@ -84,9 +83,13 @@ const activeClass = computed(() => {
   }
 });
 
-const sectionHeading = computed(() => {
-  const param = route.params.sortBy;
-  return param ? `${param[0].toUpperCase()}${param.slice(1)}` : 'Popular';
+const h1TextContent = computed(() => {
+  const params = route.params;
+  return params.sortBy ? 
+  `${params.sortBy[0].toUpperCase()}${params.sortBy.slice(1)} threads` 
+  : params.subreddit ?
+  `Popular threads in r/${route.params.subreddit}`
+  : 'Popular threads';
 })
 
 </script>
@@ -95,7 +98,7 @@ const sectionHeading = computed(() => {
   <section :class="activeClass">
     <Spinner v-if="isLoading"/>
     <template v-else-if="threads.length">
-      <h1 class="subreddit-threads-title">{{ sectionHeading }} threads</h1>
+      <h1 class="subreddit-threads-title">{{ h1TextContent }}</h1>
       <Pagination :pagination="pagination" @handle-pagination="handlePagination"/>
       <ul class="subreddit-threads-ul">
         <li v-for="item in threads" :key="item.id" class="thread-preview">

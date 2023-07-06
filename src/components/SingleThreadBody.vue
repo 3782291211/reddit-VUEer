@@ -2,14 +2,12 @@
 import { formatURL } from '../utils/formatURL';
 import { formatHTML } from '@/utils/formatHTML';
 import { removeEntities } from '@/utils/removeEntities';
-import{ computed, ref } from 'vue';
+import{ computed, ComputedRef, ref } from 'vue';
 
-const props = defineProps<{
-    data: SingleThreadResponse
-}>();
+const props = defineProps<{ data: SingleThreadResponse }>();
 
 const imageIndex = ref(0);
-const currentIndex = computed(() => {
+const currentIndex: ComputedRef<string> = computed(() => {
   return props.data.images[Math.abs(imageIndex.value) % props.data.images.length]
 });
 
@@ -19,7 +17,7 @@ const currentIndex = computed(() => {
   <section>
     <h1>{{ data.title }}</h1>
     <div class="subtitle">
-      <h2>by <span>{{ data.author }}</span>, in <router-link class="subreddit-link" :to="`/${data.sub}`">{{ data.sub }}</router-link></h2>
+      <h2>by <router-link class="user-link" :to="{ path: '/search', query: { username: data.author } }">{{ data.author }}</router-link>, in <router-link class="subreddit-link" :to="`/${data.sub}`">{{ data.sub }}</router-link></h2>
       <div>
         <img class="svg-icon" src="../assets/icons/updown.svg">
         <span>{{ data.votes }} votes</span>
@@ -30,8 +28,8 @@ const currentIndex = computed(() => {
     <article v-if="data.selftext" class="thread-description" v-html="formatHTML(data.selftext)"></article>
     <a v-if="formatURL(data.url)" :href="data.url" target="_blank" class="external">{{ formatURL(data.url) }}...</a>
     
-    <div v-if="data.preview || data.url" class="caption">
-      <p v-if="data.preview && data.media?.reddit_video">Preview</p>
+    <div v-if="data.preview" class="caption">
+      <p v-if="data.media?.reddit_video">Preview</p>
       <a :href="data.url" target="_blank">
         <div class="image-bg" :style="{ backgroundImage: `url(${removeEntities(data.preview) || data.url})`}">
           <img class="preview-img" :src="removeEntities(data.preview)" @error="e => (e.target as HTMLImageElement).src = data.url">
