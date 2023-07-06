@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { formatHTML } from '../utils/formatHTML';
 import NestedReplies from '../components/NestedReplies.vue';
-import { isTemplateNode } from '@vue/compiler-core';
 
 defineProps<{
-    data: any
+  threadData: SingleThreadResponse
 }>();
 
 const formatVotesLabel = (voteCount: number): string => {
@@ -12,10 +11,10 @@ const formatVotesLabel = (voteCount: number): string => {
   return isNaN(voteCount) ? '0 votes' : `${voteCount} vote${suffix}`;
 }
 
-const computeReplyCount = (comment: JsonComment): number => {
+const computeReplyCount = (comment: FormattedComment): number => {
   if (comment.numberOfReplies === 0) return 0;
-  return comment.replies.data.children
-  .reduce((accumulator: number, current: SingleComment) => {
+  const replies = (comment.replies as NestedReplies).data.children as CommentData[];
+  return replies.reduce((accumulator: number, current: CommentData) => {
     if (current.kind != 'more') return accumulator + 1;
     return accumulator;
   }, 0);
@@ -27,21 +26,21 @@ const computeReplyCount = (comment: JsonComment): number => {
   <section>
     <h2 class="comments-heading">Comments</h2>
     <ul>
-      <template v-for="item in data.comments" :key="item.id">
-        <li v-if="item.author">
-          <h3 v-if="!item.author.includes('[deleted]')">
-            <router-link class="comment-author" :to="{ path: '/search', query: { username: item.author } }">{{ item.author }}</router-link>
+      <template v-for="comment in threadData.comments" :key="comment.id">
+        <li v-if="comment.author">
+          <h3 v-if="!comment.author.includes('[deleted]')">
+            <router-link class="comment-author" :to="{ path: '/search', query: { username: comment.author }}">{{ comment.author }}</router-link>
           </h3>
-          <h3 v-else>{{ item.author }}</h3>
+          <h3 v-else>{{ comment.author }}</h3>
           <div class="comment-body">
-            <article v-html="formatHTML(item.body)"></article>
+            <article v-html="formatHTML(comment.body)"></article>
             <div class="flex">
-              <span class="inline"><img class="svg-icon" src="../assets/icons/updown.svg">{{ formatVotesLabel(item.votes) }}</span>
-              <span v-if="computeReplyCount(item)" class="float"><img class="svg-icon" src="../assets/images/bubble.svg">{{ computeReplyCount(item) > 1 ? `${computeReplyCount(item)} replies` : '1 reply' }}</span>
+              <span class="inline"><img class="svg-icon" src="../assets/icons/updown.svg">{{ formatVotesLabel(comment.votes) }}</span>
+              <span v-if="computeReplyCount(comment)" class="float"><img class="svg-icon" src="../assets/images/bubble.svg">{{ computeReplyCount(comment) > 1 ? `${computeReplyCount(comment)} replies` : '1 reply' }}</span>
             </div>
           </div>
-          <template v-if="computeReplyCount(item)">
-            <NestedReplies :replies="item.replies.data.children"/>
+          <template v-if="computeReplyCount(comment)">
+            <NestedReplies :replies="(comment.replies as NestedReplies).data.children"/>
           </template>
         </li>
       </template>
