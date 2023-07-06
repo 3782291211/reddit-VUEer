@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fetchSubredditBody } from '@/utils/apiRequests';
-import { computed, onMounted, ref, Ref, watch } from 'vue';
+import { computed, ComputedRef, onMounted, ref, Ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { formatHTML } from '@/utils/formatHTML';
 import Spinner from '../components/Spinner.vue';
@@ -9,14 +9,16 @@ import PopularThreads from '../components/PopularThreads.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
 
 const route = useRoute();
-const subredditBody: Ref<any> = ref({});
-const isLoading = ref(false);
-const errorMsg = ref('');
+const subredditBody: Ref<SubredditBodyResponse | null> = ref(null);
+const isLoading: Ref<boolean> = ref(false);
+const errorMsg: Ref<string> = ref('');
+const disableErrorModal: Ref<boolean> = ref(false);
 
 const fetchData = async (subreddit: string = '') => {
   isLoading.value = true;
   try {
-    const response = await fetchSubredditBody(subreddit || route.params.subreddit as string);
+    const response: SubredditBodyResponse = 
+      await fetchSubredditBody(subreddit || route.params.subreddit as string);
     subredditBody.value = response;
   } catch (err: unknown) {
     errorMsg.value = (err as Error).message || 'Unable to process your request.';
@@ -29,11 +31,16 @@ onMounted(() => fetchData());
 
 watch(() => route.params.subreddit, async toParams => {
   if (!route.path.startsWith('/r')) return;
+  subredditBody.value = null;
   fetchData(toParams as string);
 });
 
-const arrangeArgs = computed(() => {
-  const args = [subredditBody.value?.publicDescription, subredditBody.value?.description];
+const renderHTML: ComputedRef<boolean> = computed(() => {
+  return !!subredditBody.value!.publicDescription || !!subredditBody.value!.description;
+});
+
+const arrangeArgs: ComputedRef<string[]> = computed(() => {
+  const args = [subredditBody.value!.publicDescription, subredditBody.value!.description];
   return args.map(arg => arg || '');
 });
 
@@ -42,7 +49,8 @@ const arrangeArgs = computed(() => {
 <template>
   <main class="subreddit-view">
     <Spinner v-if="isLoading"/>
-    <template v-else-if="Object.keys(subredditBody).length">
+    <ErrorModal v-if="errorMsg && !disableErrorModal" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
+    <template v-else-if="subredditBody">
       <section>
         <div class="overlay">
           <div class="header" :style="{ backgroundImage: `url(${subredditBody?.banner || backgroundUrl })`}">
@@ -55,12 +63,14 @@ const arrangeArgs = computed(() => {
             <img v-if="subredditBody.header" class="header-img" :src="subredditBody.header">
           </div>
         </div>
-      <article v-html="formatHTML(arrangeArgs[0], arrangeArgs[1])" class="thread-description"></article>
+      <article v-if="renderHTML" v-html="formatHTML(arrangeArgs[0], arrangeArgs[1])" class="thread-description"></article>
       </section>
-      <PopularThreads view-type="subreddit"/>
     </template>
-    <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
+    <PopularThreads view-type="subreddit" @disable-error-modal="() => disableErrorModal = true"/>
   </main>
 </template>
 
 <style lang="css" scoped src="../assets/css/subreddit-view.css"/>
+
+<!-- A note about the formatHTML helper function
+  A subredditBody object contains a 'description' property and a 'publicDescription' property, containing different HTML content. One or both may either be a string or null. We provide both pieces of information as arguments to the formatHTML function which knows how to deal with falsy arguments.-->
