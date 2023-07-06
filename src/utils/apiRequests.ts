@@ -168,7 +168,7 @@ export const searchUserWithPagination = async ([after, before, count, username]:
   return {
     posts: transformSearchResult(json.data.children),
     pagination: {
-      countOffset: json.data.dist as number + count,
+      countOffset: (json.data.dist as number) + count,
       afterQuery: json.data.after, 
       beforeQuery: json.data.before
     }

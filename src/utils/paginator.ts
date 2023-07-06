@@ -6,7 +6,7 @@ export const paginate = async (
   sortBy: string | null, 
   subreddit: string | null,
   username: string | null
-  ): Promise<PopularThreadsResponse | PaginateUserSeach | null> => {
+  ): Promise<PopularThreadsResponse | PaginateUserPosts | null> => {
 
     const action: string = (e.target as HTMLButtonElement).name;
     if (action === 'previous') {
@@ -29,7 +29,7 @@ export const paginate = async (
       newCountOffset = -25;
     }
 
-    let response;
+    let response: PopularThreadsResponse | PaginateUserPosts;
     if (sortBy && !subreddit) {
       args[3] = sortBy;
       args[4] = null;
@@ -40,22 +40,9 @@ export const paginate = async (
       response = await(fetchPopularThreads(args));
     } else {
       response = await searchUserWithPagination([args[0], args[1], args[2], username as string]);
-      return { 
-        posts: response.posts,
-        pagination : {
-            countOffset: prevPagination.countOffset + newCountOffset,
-            afterQuery: response.pagination.afterQuery, 
-            beforeQuery: response.pagination.beforeQuery 
-        }
-      };
+      response.pagination.countOffset = prevPagination.countOffset + newCountOffset;
+      return response;
     }
-  
-    return { 
-      popularThreads: response.popularThreads,
-      pagination : {
-          countOffset: prevPagination.countOffset + newCountOffset,
-          afterQuery: response.pagination.afterQuery, 
-          beforeQuery: response.pagination.beforeQuery 
-      }
-    };
+    response.pagination.countOffset = prevPagination.countOffset + newCountOffset;
+    return response;
 }
