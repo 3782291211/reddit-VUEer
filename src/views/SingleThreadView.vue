@@ -10,16 +10,16 @@ import SingleThreadBody from '../components/SingleThreadBody.vue';
 import CommentsSection from '../components/CommentsSection.vue';
 
 const route = useRoute();
-const data: Ref<any> = ref([]);
-const isLoading = ref(false);
-const errorMsg = ref('');
+const threadData: Ref<SingleThreadResponse | null> = ref(null);
+const isLoading: Ref<boolean> = ref(false);
+const errorMsg: Ref<string> = ref('');
 
 const fetchData = async (newParams: RouteParams | null) => {
   try {
     const { subreddit, threadId, threadTitle } = newParams || route.params;
     isLoading.value = true;
     const response = await fetchSingleThread(subreddit as string, threadId as string, threadTitle as string);
-    data.value = response;
+    threadData.value = response;
   } catch (err: unknown) {
     errorMsg.value = (err as Error).message || 'Unable to process your request.';
   } finally {
@@ -38,9 +38,10 @@ watch(() => route.params, params => {
 <template>
   <main>
     <Spinner v-if="isLoading"/>
-    <div v-else-if="data.title">
-      <SingleThreadBody :data="data"/>
-      <CommentsSection v-if="data.comments?.length" :data="data"/>
+    <div v-else-if="threadData">
+      <SingleThreadBody :data="(threadData as SingleThreadResponse)"/>
+      <CommentsSection v-if="(threadData as SingleThreadResponse).comments?.length" 
+      :threadData="(threadData as SingleThreadResponse)"/>
       <p class="no-comments" v-else>There aren't any comments for this thread.</p>
     </div>
     <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
