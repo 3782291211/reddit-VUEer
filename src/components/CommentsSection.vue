@@ -2,9 +2,7 @@
 import { formatHTML } from '../utils/formatHTML';
 import NestedReplies from '../components/NestedReplies.vue';
 
-defineProps<{
-  threadData: SingleThreadResponse
-}>();
+defineProps<{ threadData: SingleThreadResponse }>();
 
 const formatVotesLabel = (voteCount: number): string => {
   const suffix = (voteCount > 1 || voteCount < -1) ? 's' : '';

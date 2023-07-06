@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { formatHTML } from '@/utils/formatHTML';
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import plusOrMinus from '../assets/icons/plusOrMinus.vue';
 
-const props = defineProps(['replies']);
+const props = defineProps<{ replies: CommentData[] }>();
 const showReplies: { [key: string]: boolean } = reactive({ id: false });
 
 const toggleReplies = (id: string) => {
   showReplies[id] = !showReplies[id];
 }
 
-const showNestedReplies = (reply: any) => {
-  return reply.data.replies
+const showNestedReplies = (reply: CommentData): boolean => {
+  return !!reply.data.replies
     && reply.data.replies.data.children[0].kind !== 'more'
     && showReplies[reply.data.id];
 }
 
-const showExpandButton = (reply: any) => {
-  return reply.data.replies
+const showExpandButton = (reply: CommentData): boolean => {
+  return !!reply.data.replies
     && reply.data.replies.data.children[0].kind !== 'more';
 }
 
@@ -34,7 +34,7 @@ const showExpandButton = (reply: any) => {
         <article v-html="formatHTML(reply.data.body_html)"></article>
       </div>
       <template v-if="showNestedReplies(reply)">
-        <NestedReplies :replies="reply.data.replies.data.children"/>
+        <NestedReplies :replies="(reply.data.replies as NestedReplies).data.children"/>
       </template>
     </li>
   </ul>
