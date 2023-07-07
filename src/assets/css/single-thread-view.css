@@ -260,21 +260,34 @@ li p {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) {
+  main {
+    top: 90px
+  }
+
   .subtitle {
-    font-size: 10px
+    font-size: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 5px;
+  }
+
+  .subtitle div {
+    min-width: 60px;
+    margin: 5px auto 0 -2px;
   }
 
   h1 {
-    font-size: 18px
+    font-size: 17px;
+    margin-bottom: 10px;
   }
 
-  h2 {
-    font-size: 16px;
+  .comments-heading {
+    font-size: 17px;
   }
-  
-  a.subreddit-link {
-    font-size: 14px
+
+  h2, a.subreddit-link  {
+    font-size: 13px;
   }
   
   video {

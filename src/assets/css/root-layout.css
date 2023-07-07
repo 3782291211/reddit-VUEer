@@ -246,12 +246,13 @@ ul[name="popular-subreddits"] {
 
 @media (max-width: 500px) {
   header h2 {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   header svg {
-    left: 120px;
-    height: 20px;
+    left: 130px;
+    top: 17px;
+    height: 25px;
   }
   
 }
