@@ -114,6 +114,7 @@ ul {
   z-index: 1;
   left: 50%;
   transform: translate(-50%, 0%);
+  border-radius: 8px;
 }
 
 .image-bg {
@@ -184,7 +185,17 @@ ul {
 
 @media (max-width: 400px) {
   .trending-threads {
-    height: 350px
+    height: 350px;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .trending-image, .title, .subtitle, .trending-info, h2, p {
+    border-radius: 0;
+  }
+
+  h2 {
+    padding-left: 15px
   }
 
   #spinner {
@@ -197,7 +208,7 @@ ul {
   }
 
   .buttons {
-    margin: 5px 10px 0 auto;
+    margin: 10px 19px 0 auto;
   }
 
   .loading-text {

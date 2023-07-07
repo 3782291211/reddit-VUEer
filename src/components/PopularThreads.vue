@@ -100,7 +100,7 @@ const h1TextContent = computed(() => {
     <template v-else-if="threads.length">
       <h1 class="subreddit-threads-title">{{ h1TextContent }}</h1>
       <Pagination :pagination="pagination" @handle-pagination="handlePagination"/>
-      <ul class="subreddit-threads-ul">
+      <ul class="subreddit-threads-ul" data-cy="threads-list">
         <li v-for="item in threads" :key="item.id" class="thread-preview">
           <ThreadPreviewCard :item="item"/>
         </li>

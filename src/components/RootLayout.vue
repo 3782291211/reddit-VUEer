@@ -83,11 +83,11 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]) => {
     <h3 class="filter">Filter threads</h3>
     <div class="router-links" id="router-links">
       <router-link :class="activeClass('popular')" :to="{name: 'popular', params: { sortBy: 'popular' }}">Popular</router-link>
-      <router-link :class="activeClass('top')" to="/top">Top</router-link>
-      <router-link :class="activeClass('rising')" to="/rising">Rising</router-link>
-      <router-link :class="activeClass('hot')" to="/hot">Hot</router-link>
-      <router-link :class="activeClass('new')" to="/new">New</router-link>
-      <router-link :class="activeClass('best')" to="/best">Best</router-link>
+      <router-link :class="activeClass('top')" to="/top" data-cy="top-link">Top</router-link>
+      <router-link :class="activeClass('rising')" to="/rising" data-cy="rising-link">Rising</router-link>
+      <router-link :class="activeClass('hot')" to="/hot" data-cy="hot-link">Hot</router-link>
+      <router-link :class="activeClass('new')" to="/new" data-cy="new-link">New</router-link>
+      <router-link :class="activeClass('best')" to="/best" data-cy="best-link">Best</router-link>
     </div>
     <label v-if="windowWidth < 1000">Search threads</label> 
     <SearchBar v-if="windowWidth < 1000" :class="{mobileSearchbar: windowWidth < 1000}"/>

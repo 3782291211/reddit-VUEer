@@ -11,34 +11,49 @@
 
 <style scoped>
 main {
-    width: 50%;
+    width: 40%;
     text-align: center;
     margin: 0 auto;
     position: relative;
-    top: 30vh
+    top: 30vh;
+    left: 50px;
+    background-color: #15171c;
+    border-radius: 20px
 }
 
 a {
     width: fit-content;
-    margin: 10px auto;
+    margin: 20px auto 0;
     padding: 4px 8px;
     border-radius: 7px
 }
 
 svg {
-    height: 70px;
+    height: 200px;
     margin: 10px;
     color: indianred;
 }
 
 h1 {
-    margin-bottom: 15px
+    margin-bottom: 15px;
+    padding-top: 40px;
+}
+
+@media (max-width: 1000px) {
+    main {
+        left: 0;
+        top: 20vh;
+        width: 80%
+    }
 }
 
 @media (max-width: 500px) {
     main {
-        top: 20vh;
-        width: 100%
+        width: 90%
+    }
+
+    svg {
+        height: 100px
     }
 }
 </style>
