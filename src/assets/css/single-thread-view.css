@@ -278,12 +278,8 @@ li p {
   }
 
   h1 {
-    font-size: 19px;
+    font-size: 20px;
     font-weight: bold;
-  }
-
-  .comment-author {
-    font-size: 15px;
   }
 
   .comments-heading {

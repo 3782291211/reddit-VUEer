@@ -26,7 +26,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
 
 <template>
 <section>
-    <h2>Profile</h2>
+    <h2 id="scrollRef">Profile</h2>
 
     <div class="profile">
       <div>

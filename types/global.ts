@@ -321,11 +321,11 @@ declare global {
         is_gold: boolean,
         verified: boolean,
         icon_img: stringOrNull,
-        subreddit?: {
+        subreddit: {
           icon_img: stringOrNull,
           display_name_prefixed: string,
           user_is_banned: boolean | string | null
-        }
+        } | null
       }
     }
   ]

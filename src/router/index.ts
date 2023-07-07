@@ -34,7 +34,15 @@ const router: Router = createRouter({
       name: 'notFound',
       component: () => import('../components/NotFound.vue')
     }
-  ]
+  ],
+  scrollBehavior(to) {
+    if (to.name === 'user' && to.query.username) {
+      return {
+        el: '#scrollRef',
+        top: 70
+      }
+    }
+  }
 })
 
 router.beforeEach((to: RouteLocationNormalized) => {
