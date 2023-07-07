@@ -132,15 +132,17 @@ export const searchUser = async (username: string): Promise<SearchUserResponse> 
   ]);
 
   if (!response[0].ok || !response[1].ok) throwSearchError(response[0]);
-  
   const json: SearchUserJson = await Promise.all([response[0].json(), response[1].json()]);
+  
   const posts: Post[] | [] = json[0].data?.children.length ? transformSearchResult(json[0].data.children) : [];
 
+  if (!json[1].data.subreddit) throw new Error(`Unable to retreive data for user "${username}".`);
+  
   const profileData: ProfileData = {
     icon: json[1].data.icon_img || json[1].data.subreddit.icon_img || '',
     name: json[1].data.subreddit.display_name_prefixed || json[1].data.name,
     karma: json[1].data.total_karma,
-    subscribers: json[1].data.subscribers,
+    subscribers: json[1].data.subscribers || 0,
     banned: json[1].data.subreddit.user_is_banned,
     isPremium: json[1].data.is_gold,
     isVerified: json[1].data.verified
