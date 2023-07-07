@@ -274,20 +274,19 @@ li p {
 
   .subtitle div {
     min-width: 60px;
-    margin: 5px auto 0 -2px;
+    margin: 3px auto 0 -2px;
   }
 
   h1 {
-    font-size: 17px;
-    margin-bottom: 10px;
+    font-size: 19px;
   }
 
   .comments-heading {
     font-size: 17px;
   }
 
-  h2, a.subreddit-link  {
-    font-size: 13px;
+  h2, a.subreddit-link,   .subtitle span  {
+    font-size: 15px;
   }
   
   video {
