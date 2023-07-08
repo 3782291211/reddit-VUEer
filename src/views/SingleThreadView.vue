@@ -8,6 +8,7 @@ import Spinner from '../components/Spinner.vue';
 import ErrorModal from '@/components/ErrorModal.vue';
 import SingleThreadBody from '../components/SingleThreadBody.vue';
 import CommentsSection from '../components/CommentsSection.vue';
+import BackToTopButton from '../components/BackToTopButton.vue';
 
 const route = useRoute();
 const threadData: Ref<SingleThreadResponse | null> = ref(null);
@@ -43,6 +44,7 @@ watch(() => route.params, params => {
       <CommentsSection v-if="(threadData as SingleThreadResponse).comments?.length" 
       :threadData="(threadData as SingleThreadResponse)"/>
       <p class="no-comments" v-else>There aren't any comments for this thread.</p>
+      <BackToTopButton/>
     </div>
     <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
   </main>

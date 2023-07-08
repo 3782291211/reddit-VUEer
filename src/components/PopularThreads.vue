@@ -8,6 +8,7 @@ import ThreadPreviewCard from '../components/ThreadPreviewCard.vue';
 import Spinner from '../components/Spinner.vue';
 import Pagination from '@/components/Pagination.vue';
 import ErrorModal from '../components/ErrorModal.vue';
+import BackToTopButton from '../components/BackToTopButton.vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps<{ viewType: string }>();
@@ -105,6 +106,7 @@ const h1TextContent = computed(() => {
           <ThreadPreviewCard :item="item"/>
         </li>
       </ul>
+      <BackToTopButton/>
     </template>
   </section>
   <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>

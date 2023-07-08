@@ -42,7 +42,7 @@ const thumbnailSrc: ComputedRef<boolean> =
 
     <video-player
     v-if="item.media" 
-    class="video-player"
+    class="video-player vjs-big-play-centered"
     :src="item.media"
     controls
     :loop="true"

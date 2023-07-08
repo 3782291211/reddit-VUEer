@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import Spinner from '@/components/Spinner.vue';
 import { paginate } from '@/utils/paginator';
 import UserProfileAndPosts from '../components/UserProfileAndPosts.vue';
+import BackToTopButton from '../components/BackToTopButton.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -108,6 +109,7 @@ const handleReset = () => {
   :searchTerm="searchTerm"
   :pagination="pagination"/>
 
+  <BackToTopButton v-if="userPosts.length"/>
   <ErrorModal v-if="errorMsg" :error-msg="errorMsg" @close="() => errorMsg = ''"/>
 </main>
 </template>
