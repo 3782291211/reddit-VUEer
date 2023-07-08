@@ -50,11 +50,16 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
         <li class="thread-preview" v-for="comment in userPosts" :key="comment.id">
           <template v-if="comment.body">
             <div class="post-header">
-              <p class="op"><font-awesome-icon class="comment-icon" icon="fa-solid fa-comment-dots" />Replied to &quot;<router-link :to="formatRouteDescriptor('thread', comment.link)" class="title">{{ comment.originalPost }}</router-link>&quot;</p>
+              <p class="op">
+                <font-awesome-icon class="comment-icon" icon="fa-solid fa-comment-dots" />
+                Replied to &quot;
+                  <router-link :to="formatRouteDescriptor('thread', comment.link)" class="title" data-cy="search-thread-link">{{ comment.originalPost }}</router-link>
+                &quot;
+              </p>
               <router-link :to="formatRouteDescriptor('subreddit', comment.link)" class="subreddit-link">{{ comment.subreddit }}</router-link>
             </div>
             <p class="time">{{ comment.createdAt }} ago</p>
-            <p>{{ comment.author }} wrote:</p>
+            <p data-cy="search-comment-author">{{ comment.author }} wrote:</p>
             <blockquote class="italic" v-html="formatHTML(comment.body)"></blockquote>
           </template>
 

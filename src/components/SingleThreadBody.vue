@@ -57,7 +57,7 @@ const currentIndex: ComputedRef<string> = computed(() => {
       
     <video-player
     v-if="data.media?.reddit_video" 
-    class="video-player"
+    class="video-player vjs-big-play-centered"
     :src="data.media?.reddit_video.dash_url"
     :poster="removeEntities(data.preview)"
     controls

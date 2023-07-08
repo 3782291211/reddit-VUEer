@@ -41,7 +41,8 @@ watch(() => route.path, () => showResults.value = false);
 const roundedBorder = computed(() => {
   return {
     searching: searchResults.value.length,
-    rounded: isLoading.value
+    rounded: isLoading.value,
+    fullWidth: isLoading.value
   }
 });
 

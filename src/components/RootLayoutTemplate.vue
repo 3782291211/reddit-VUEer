@@ -33,10 +33,12 @@ const showMenu = ref(false);
       <router-link id="home" :to="{ path: '/' }"><font-awesome-icon icon="fa-solid fa-icons" beat-fade style="--fa-animation-duration: 3.5s"/></router-link>
       <SearchBar v-if="windowWidth > 1000"/>
     </header>
+
     <div class="menu-controls">
       <list v-if="!showMenu" class="mobile" @click="() => showMenu = true"/>
       <close v-if="showMenu" class="mobile" @click="() => showMenu = false"/>
     </div>
+
     <section v-if="showMenu || windowWidth > 1000" id="feeds">
       <h3 class="filter">Filter threads</h3>
       <div class="router-links" id="router-links">
@@ -47,14 +49,16 @@ const showMenu = ref(false);
         <router-link :class="activeClass('new')" to="/new" data-cy="new-link">New</router-link>
         <router-link :class="activeClass('best')" to="/best" data-cy="best-link">Best</router-link>
       </div>
-      <label v-if="windowWidth < 1000">Search threads</label> 
-      <SearchBar v-if="windowWidth < 1000" :class="{mobileSearchbar: windowWidth < 1000}"/>
-      <label v-if="windowWidth < 1000" class="search-users">Search users</label>  
 
-      <label for="search" class="search-subreddits">Search subreddits</label>
+      <h3 v-if="windowWidth < 1000">Search threads</h3> 
+      <SearchBar v-if="windowWidth < 1000" :class="{mobileSearchbar: windowWidth < 1000}"/>
+      
+      <h3 v-if="windowWidth < 1000" class="search-users">Search users</h3>
+
+      <h3 class="search-subreddits">Search subreddits</h3>
       <form @submit.prevent="$emit('handleSubmit')" class="flex">
         <input id="search" name="search" :value="modelValue" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" @focus="$emit('handleFocus')" data-cy="sidebar-search">
-        <input type="submit" name="submit" :value="!isLoading ? 'Search' : ' '" :class="{isLoading: isLoading}">
+        <input type="submit" name="submit" :value="!isLoading ? 'Search' : ' '" :class="{isLoading: isLoading}" data-cy="sidebar-submit">
          <font-awesome-icon v-if="isLoading" icon="spinner" class="spinner" spin spin-reverse size="2xl" />
         <font-awesome-icon v-if="!isLoading" class="icon" :icon="['fas', 'magnifying-glass']" beat />
       </form>
@@ -64,6 +68,7 @@ const showMenu = ref(false);
           <a name="link" :href="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']" name="link">{{ subreddit }}</p></a>
         </li>
       </uL>
+
       <p class="no-results" v-else-if="noResults">No results.</p>
       <template v-if="!showSearchResults">
       <h3>Popular subreddits</h3>

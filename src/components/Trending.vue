@@ -3,6 +3,7 @@ import { fetchTrendingThreads } from '@/utils/apiRequests';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { formatRouteDescriptor } from '@/utils/formatRouteDescriptor';
+import { removeEntities } from '@/utils/removeEntities';
 
 const trendingThreads: Ref<Thread[] | []> = ref([]);
 const currentIndex: Ref<number> = ref(0);
@@ -47,7 +48,7 @@ const nextIndex: ComputedRef<number> =
           <div class="trending-info">
             
             <router-link :to="formatRouteDescriptor('thread', trendingThreads[nextIndex].url)">
-              <p class="title">{{ trendingThreads[nextIndex].title }}</p>
+              <p class="title">{{ removeEntities(trendingThreads[nextIndex].title) }}</p>
             </router-link>
             <p class="subtitle">by
             
