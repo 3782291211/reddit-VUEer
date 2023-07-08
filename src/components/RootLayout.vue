@@ -11,6 +11,7 @@ const searchResults: Ref<string[] | []> = ref([]);
 const popularSubreddits: Ref<string[] | []> = ref([]);
 const searchTerm: Ref<string> = ref('');
 const isLoading: Ref<boolean> = ref(false);
+const noResults: Ref<boolean> = ref(false);
 const inputIsBlurred: Ref<boolean> = ref(true);
 const activeParam: Ref<string> = ref('');
 const showMenu = ref(false);
@@ -23,23 +24,32 @@ onMounted(async () => {
 
 onUnmounted(() => window.removeEventListener('resize', handleWidthChange));
 
-watch([searchTerm, inputIsBlurred], async ([newSearchTerm]) => {
+/*watch([searchTerm, inputIsBlurred], async ([newSearchTerm]) => {
     if (inputIsBlurred.value) return;
     isLoading.value = true;
     searchResults.value = await searchSubreddits(newSearchTerm);
     isLoading.value = false;
-});
+});*/
 
 watch(() => route.params, toParam => {
   activeParam.value = toParam.subreddit as string || toParam.sortBy as string;
   showMenu.value = false;
 })
 
-const noResults: ComputedRef<boolean> = computed(() => {
+const handleSubmit = async () => {
+  isLoading.value = true;
+  searchResults.value = await searchSubreddits(searchTerm.value);
+  isLoading.value = false;
+  if (!searchResults.value.length) {
+    noResults.value = true;
+  }
+}
+
+/*const noResults: ComputedRef<boolean> = computed(() => {
     return Boolean(searchTerm.value 
     && !searchResults.value.length 
     && !inputIsBlurred.value);
-})
+})*/
 
 const showSearchResults: ComputedRef<boolean> = computed(() => {
   return Boolean(searchResults.value.length && !inputIsBlurred.value);
@@ -55,7 +65,8 @@ const activeClass = (urlPathFragment: string):
 
 const handleBlur = (e: FocusEvent) => {
   const targetName: string = (e.relatedTarget as any)?.name;
-  if (targetName === "link") return;
+  console.log(targetName)
+  if (targetName === "link" || targetName === 'submit') return;
   inputIsBlurred.value = true;
 }
 
@@ -70,7 +81,8 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]): "first" | "l
 
 <template>
    <RootLayoutTemplate
-   :windowWidth="windowWidth"
+   v-model.trim="searchTerm"
+   @handle-submit="handleSubmit"
    @handle-blur="handleBlur"
    @handle-focus="handleFocus"
    :roundTerminalBorders="roundTerminalBorders"
@@ -79,7 +91,8 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]): "first" | "l
    :noResults="noResults"
    :activeClass="activeClass"
    :popularSubreddits="popularSubreddits"
-   v-model.trim="searchTerm"
+   :windowWidth="windowWidth"
+   :isLoading="isLoading"
    />
 </template>
 
