@@ -24,12 +24,13 @@ const currentIndex: ComputedRef<string> = computed(() => {
         <span>{{ data.votes }} votes</span>
       </div>
     </div>
+    <p class="time">{{ data.createdAt }} ago</p>
 
     <h3 v-if="data.selftext" class="op">Original post</h3>
     <article v-if="data.selftext" class="thread-description" v-html="formatHTML(data.selftext)"></article>
     <a v-if="formatURL(data.url)" :href="data.url" target="_blank" class="external">{{ formatURL(data.url) }}...</a>
     
-    <div v-if="data.preview" class="caption">
+    <div v-if="!data.media?.reddit_video" class="caption">
       <p v-if="data.media?.reddit_video">Preview</p>
       <a :href="data.url" target="_blank">
         <div class="image-bg" :style="{ backgroundImage: `url(${removeEntities(data.preview) || data.url})`}">
@@ -38,7 +39,7 @@ const currentIndex: ComputedRef<string> = computed(() => {
       </a>
     </div>
     
-    <div class="embed" v-if="data.embed" v-html="formatHTML(data.embed)"></div>
+    <!-- <div class="embed" v-if="data.embed" v-html="formatHTML(data.embed)"></div> -->
 
     <transition-group v-if="data.images.length" name="gallery" tag="div">
     <figure v-if="data.images.length"  class="image-bg" :key="currentIndex" :style="{ backgroundImage: `url(${removeEntities(currentIndex)})`}">
@@ -54,10 +55,14 @@ const currentIndex: ComputedRef<string> = computed(() => {
     </figure>
     </transition-group>
       
-    <video v-if="data.media?.reddit_video" controls>
-      <source :src="data.media?.reddit_video.fallback_url" type="video/mp4">
-      Video not supported.
-    </video>
+    <video-player
+    v-if="data.media?.reddit_video" 
+    class="video-player"
+    :src="data.media?.reddit_video.dash_url"
+    :poster="removeEntities(data.preview)"
+    controls
+    :loop="true"
+    :volume="0.6"/>
   </section>
 </template>
 

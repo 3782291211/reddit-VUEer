@@ -19,7 +19,7 @@ const fetchData = async (subreddit: string = '') => {
   isLoading.value = true;
   try {
     const response: SubredditBodyResponse = 
-      await fetchSubredditBody(subreddit || route.params.subreddit as string);
+    await fetchSubredditBody(subreddit || route.params.subreddit as string);
     subredditBody.value = response;
   } catch (err: unknown) {
     errorMsg.value = (err as Error).message || 'Unable to process your request.';
@@ -57,10 +57,17 @@ const arrangeArgs: ComputedRef<string[]> = computed(() => {
           <div class="header" :style="{ backgroundImage: `url(${subredditBody?.banner || backgroundUrl })`}">
             <img v-if="subredditBody.icon" class="icon" :src="subredditBody.icon">
             <h1>r/{{ route.params.subreddit }}</h1>
+
             <div class="flex">
               <h2 v-if="subredditBody.category">{{ subredditBody.category }}</h2>
-              <h2 :class="{borderLeft : subredditBody.category}" v-if="subredditBody.subscribers">{{ subredditBody.subscribers }} subscribers</h2>
+              <h2 v-if="subredditBody.createdAt" :class="[{borderLeft : subredditBody.category}, 'soft']">Added in {{ subredditBody.createdAt }}</h2>
             </div>
+
+            <div class="flex members">
+              <h3 v-if="subredditBody.members"><strong>{{ subredditBody.members }}</strong> members</h3>
+              <h3 v-if="subredditBody.online" :class="{borderLeft : subredditBody.members}"><strong>{{ subredditBody.online }}</strong> online</h3>
+            </div>
+
             <img v-if="subredditBody.header" class="header-img" :src="subredditBody.header">
           </div>
         </div>
