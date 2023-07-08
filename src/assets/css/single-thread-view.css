@@ -12,7 +12,8 @@ ul {
 }
 
 h1 {
-  margin-bottom: 15px
+  margin-bottom: 15px;
+  font-size: 24px
 }
 
 .comments-heading {
@@ -39,6 +40,7 @@ a.external {
 .user-link {
   text-decoration: underline;
   color: rgb(246, 165, 95);
+  font-size: 18px;
 }
 
 a.external:hover, .user-link:hover {
@@ -218,7 +220,7 @@ svg:hover {
 
 .subreddit-link {
   padding: 3px 7px;
-  font-size: 19px;
+  font-size: 18px;
 }
 
 .subtitle div {
