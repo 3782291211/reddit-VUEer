@@ -55,10 +55,6 @@ input[type="submit"]:enabled:active {
   background: black;
 }
 
-input[type="submit"]:disabled:active {
-  background: red;
-}
-
 form {
   width: 99%;
   margin: auto
@@ -158,6 +154,8 @@ ul[name="popular-subreddits"] {
 
 .no-results {
   margin: 4px 0 0 4px;
+  color: orange;
+  font-style: italic;
 }
 
 .banner {

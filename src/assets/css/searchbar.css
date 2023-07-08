@@ -35,7 +35,7 @@ input[type="submit"], #users {
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
     border: 1px solid rgb(86, 82, 87);
-    padding: 8px 8px;
+    padding: 8px;
     width: 85px;
     background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
     color: white;

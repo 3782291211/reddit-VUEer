@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import type { Ref, ComputedRef } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
+import type { Ref } from 'vue';
 import { searchSubreddits } from '@/utils/apiRequests';
 import { fetchPopularSubreddits } from '../utils/apiRequests';
 import { useRoute } from 'vue-router';
@@ -12,7 +12,8 @@ const popularSubreddits: Ref<string[] | []> = ref([]);
 const searchTerm: Ref<string> = ref('');
 const isLoading: Ref<boolean> = ref(false);
 const noResults: Ref<boolean> = ref(false);
-const inputIsBlurred: Ref<boolean> = ref(true);
+const formIsFocussed: Ref<boolean> = ref(false);
+const timeoutID: Ref<ReturnType<typeof setTimeout> | null> = ref(null);
 const activeParam: Ref<string> = ref('');
 const showMenu = ref(false);
 const windowWidth: Ref<number> = ref(window.innerWidth);
@@ -20,16 +21,14 @@ const windowWidth: Ref<number> = ref(window.innerWidth);
 onMounted(async () => {
   popularSubreddits.value = await fetchPopularSubreddits();
   window.addEventListener('resize', handleWidthChange);
+  window.addEventListener('click', hideResults);
 });
 
-onUnmounted(() => window.removeEventListener('resize', handleWidthChange));
-
-/*watch([searchTerm, inputIsBlurred], async ([newSearchTerm]) => {
-    if (inputIsBlurred.value) return;
-    isLoading.value = true;
-    searchResults.value = await searchSubreddits(newSearchTerm);
-    isLoading.value = false;
-});*/
+onUnmounted(() => {
+  window.removeEventListener('resize', handleWidthChange);
+  window.removeEventListener('click', hideResults);
+  clearTimeout(timeoutID.value as ReturnType<typeof setTimeout>);
+});
 
 watch(() => route.params, toParam => {
   activeParam.value = toParam.subreddit as string || toParam.sortBy as string;
@@ -37,23 +36,19 @@ watch(() => route.params, toParam => {
 })
 
 const handleSubmit = async () => {
+  if (!searchTerm.value) return;
+  noResults.value = false;
+  formIsFocussed.value = true;
   isLoading.value = true;
   searchResults.value = await searchSubreddits(searchTerm.value);
   isLoading.value = false;
   if (!searchResults.value.length) {
     noResults.value = true;
+    timeoutID.value = setTimeout(() => {
+      noResults.value = false;
+    }, 5000);
   }
 }
-
-/*const noResults: ComputedRef<boolean> = computed(() => {
-    return Boolean(searchTerm.value 
-    && !searchResults.value.length 
-    && !inputIsBlurred.value);
-})*/
-
-const showSearchResults: ComputedRef<boolean> = computed(() => {
-  return Boolean(searchResults.value.length && !inputIsBlurred.value);
-});
 
 const activeClass = (urlPathFragment: string): 
 [{ currentSubreddit: boolean, currentSort: boolean}] => {
@@ -63,14 +58,14 @@ const activeClass = (urlPathFragment: string):
   }];
 }
 
-const handleBlur = (e: FocusEvent) => {
-  const targetName: string = (e.relatedTarget as any)?.name;
-  console.log(targetName)
-  if (targetName === "link" || targetName === 'submit') return;
-  inputIsBlurred.value = true;
+const hideResults = (e: MouseEvent) => {
+  const targetName: string = (e.target as HTMLInputElement).name;
+  if (targetName === 'search' || targetName === 'submit') return;
+  if ((e.target as HTMLElement).id === 'feeds') return;
+  formIsFocussed.value = false;
 }
 
-const handleFocus = () => inputIsBlurred.value = false;
+const handleFocus = () => formIsFocussed.value = true;
 const handleWidthChange = () => windowWidth.value = window.innerWidth;
 const roundTerminalBorders = (sub: string, resultsArray: string[]): "first" | "last" | void => {
   if (resultsArray.indexOf(sub) === 0) return 'first';
@@ -83,10 +78,9 @@ const roundTerminalBorders = (sub: string, resultsArray: string[]): "first" | "l
    <RootLayoutTemplate
    v-model.trim="searchTerm"
    @handle-submit="handleSubmit"
-   @handle-blur="handleBlur"
    @handle-focus="handleFocus"
    :roundTerminalBorders="roundTerminalBorders"
-   :showSearchResults="showSearchResults"
+   :showSearchResults="Boolean(formIsFocussed && searchResults.length)"
    :searchResults="searchResults"
    :noResults="noResults"
    :activeClass="activeClass"

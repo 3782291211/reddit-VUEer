@@ -12,13 +12,14 @@ defineProps<{
   showSearchResults: boolean,
   noResults: boolean,
   popularSubreddits: string[],
-  modelValue: string
+  modelValue: string,
+  isLoading: boolean
 }>();
 
 defineEmits<{
   (e: 'update:modelValue'): void,
   (e: 'handleFocus'): void,
-  (e: 'handleBlur', eventObject: FocusEvent): void
+  (e: 'handleSubmit'): void
 }>();
 
 const showMenu = ref(false);
@@ -49,14 +50,18 @@ const showMenu = ref(false);
       <label v-if="windowWidth < 1000">Search threads</label> 
       <SearchBar v-if="windowWidth < 1000" :class="{mobileSearchbar: windowWidth < 1000}"/>
       <label v-if="windowWidth < 1000" class="search-users">Search users</label>  
-      <label for="search" class="search-subreddits">Search subreddits</label>  
-      <div class="flex">
-        <input id="search" :value="modelValue" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" @blur="$emit('handleBlur', $event)" @focus="$emit('handleFocus')" data-cy="sidebar-search">
-        <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" beat />
-      </div>
+
+      <label for="search" class="search-subreddits">Search subreddits</label>
+      <form @submit.prevent="$emit('handleSubmit')" class="flex">
+        <input id="search" name="search" :value="modelValue" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" @focus="$emit('handleFocus')" data-cy="sidebar-search">
+        <input type="submit" name="submit" :value="!isLoading ? 'Search' : ' '" :class="{isLoading: isLoading}">
+         <font-awesome-icon v-if="isLoading" icon="spinner" class="spinner" spin spin-reverse size="2xl" />
+        <font-awesome-icon v-if="!isLoading" class="icon" :icon="['fas', 'magnifying-glass']" beat />
+      </form>
+
       <ul name="search-results" v-if="showSearchResults" data-cy="sidebar-search-results">
         <li v-for="subreddit in searchResults" :key="subreddit">
-          <a name="link" :href="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']">{{ subreddit }}</p></a>
+          <a name="link" :href="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']" name="link">{{ subreddit }}</p></a>
         </li>
       </uL>
       <p class="no-results" v-else-if="noResults">No results.</p>
