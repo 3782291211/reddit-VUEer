@@ -2,8 +2,9 @@ ul {
     list-style: none;
     padding-left: 20px;
     padding-bottom: 3px;
-    margin: 8px 0;
+    margin: 0;
 }
+
 .terminal-reply {
     padding-left: 10px;
     margin-bottom: 10px
@@ -13,9 +14,14 @@ ul {
 .reply-header {
   margin: 12px 0 5px 2px;
 }
+
 .nested-author {
   font-weight: 900;
   display: inline-block;
+}
+
+.nested-timestamp {
+  font-size: 13px
 }
 
 .user-link {
@@ -28,10 +34,6 @@ ul {
   padding: 4px 6px;
   border-radius: 4px;
   color: black;
-}
-
-ul {
-  margin: 0;
 }
 
 article {

@@ -151,6 +151,7 @@ img {
 .image-bg {
   position: relative;
   width: 100%;
+  background-position: center;
 }
 
 .image-bg:before {

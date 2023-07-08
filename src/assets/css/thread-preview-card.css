@@ -34,8 +34,7 @@ img {
   display: block;
   max-width: 100%;
   max-height: 400px;
-  margin: 17px auto 10px;
-  border-radius: 7px
+  margin: 17px auto 6px;
 }
 
 a.external {
@@ -53,6 +52,11 @@ a.external {
   font-size: 16px;
 }
 
+.timestamp {
+  display: inline-block;
+  margin-left: 15px;
+}
+
 .user-link:hover {
   scale: 1;
   color: rgb(123, 123, 245)
@@ -62,11 +66,12 @@ a.external {
   font-size: 16px
 }
 
-video {
+video, .video-player {
   display: block;
   margin: 15px auto 5px;
-  height: auto;
-  max-height: 400px;
+  width: auto;
+  height: 400px;
+  font-size: 13px
 }
 
 .body {
@@ -101,11 +106,23 @@ video {
     font-size: 13px;
   }
 
+  .subreddit-link {
+    margin-right: 8px;
+  }
+
   article > * {
     font-size: 11px;
   }
 
-  video {
+  .video-player {
     max-height: 300px;
+  }
+
+  .timestamp {
+    margin: 5px 0 0 5px;
+  }
+
+  img {
+    margin-top: 10px;
   }
 }

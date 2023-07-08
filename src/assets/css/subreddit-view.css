@@ -13,7 +13,7 @@ h1 {
   font-weight: 900;
   z-index: 1;
   color: whitesmoke;
-  margin: 25px auto 30px;
+  margin: 15px auto;
 }
 
 h2 {
@@ -24,9 +24,31 @@ h2 {
   font-size: 16px
 }
 
+.soft {
+  font-style: italic;
+  font-weight: 400
+}
+
+h2.borderLeft {
+  font-weight: 200;
+}
+
 .flex {
   justify-content: center;
   margin: -10px 0 10px;
+}
+
+.members h3 {
+  z-index: 1;
+  padding: 0 15px
+}
+
+.members {
+  margin-top: -5px
+}
+
+strong {
+  font-weight: 700;
 }
 
 .borderLeft {
