@@ -1,16 +1,29 @@
-# reddit-VUEer
+# *reddit-VUEer* : a Vue.js & TypeScript project
+This ia a Vite-powered project constructed using JSON data from the reddit API. The app allows users to browse, filter and paginate through threads, search for specific threads and subreddits, view comments, search for users, and more. 
 
-# Features
-- TypeScript
-- Utilises composition API for component setup, hooks and reactivity features
+You can visit the app using this link.
+
+<!-- ![MMI™ Flammarion Logo Badge](/src/assets/icons/updown.svg)
+![MMI™ Flammarion Logo Badge](/src/assets/images/left.svg)
+![MMI™ Flammarion Logo Badge]()
+![MMI™ Flammarion Logo Badge](/src/assets/icons/updown.svg) -->
+
+<p float="left">
+  <img src="./src/assets/images/left.svg" width="50" />
+  <img src="./src/assets/icons/updown.svg" width="50" /> 
+  <img src="./src/assets/images/logo.svg" width="50" />
+</p>
+
+
+## Key product features
+- Strict type-checking and type-based declarations fully integrated into every part of the app.
+- Utilises **composition API** for component setup, hooks and reactivity features.
+- Data fetching and asynchronous error handling using the reddit JSON API. 
+- Extensive use of props, watchers, lifecycle hooks, emitted events and conditional rendering.
 - Features recursive components for unknown configurations of deeply nested replies.
 - Reusable components and functions with low coupling
-- Vue Router for declarative and imperative navigation
-- Asynchronous error handling
-
-<img src='home-view.png' height=350>
-
-This template should help get you started developing with Vue 3 in Vite.
+- Vue Router for declarative and imperative client-side navigation
+- Image gallery slideshows animated using Vue transition groups.
 
 ## Recommended IDE Setup
 
