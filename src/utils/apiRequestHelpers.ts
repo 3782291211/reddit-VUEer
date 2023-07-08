@@ -1,7 +1,11 @@
+import { computeElapsedTime } from "./computeElapsedTime";
+import { formatSubscriberCount } from "./formatSubscriberCount";
+
 export const transformSubredditThreads = (json: PopularThreadsJson): Thread[] => {
     return json.data.children.map((thread: ThreadJson) => {
       return {
         id: thread.data.id,
+        createdAt: computeElapsedTime(thread.data.created_utc),
         subreddit: 'r/' + thread.data.subreddit,
         url: thread.data.permalink.slice(0, -1),
         selftext: thread.data.selftext_html,
@@ -11,7 +15,7 @@ export const transformSubredditThreads = (json: PopularThreadsJson): Thread[] =>
         downs: thread.data.downs,
         thumbnail: thread.data.thumbnail,
         src: thread.data.url,
-        media: (thread.data.secure_media as VideoMedia)?.reddit_video?.fallback_url || null
+        media: (thread.data.secure_media as VideoMedia)?.reddit_video?.dash_url || null
       };
     });
   }
@@ -20,6 +24,7 @@ export const transformSubredditThreads = (json: PopularThreadsJson): Thread[] =>
     return posts.map(({ data }: PostJson) => {
       return {
           id: data.id,
+          createdAt: computeElapsedTime(data.created_utc),
           newThread: data.title,
           originalPost: data.link_title,
           author: data.author,
@@ -33,7 +38,9 @@ export const transformSubredditThreads = (json: PopularThreadsJson): Thread[] =>
   
   export const transformSubredditBody = ({ data }: SubredditBodyJson): SubredditBodyResponse => {
     return {
-      subscribers: data.active_user_count,
+      online: formatSubscriberCount(data.active_user_count),
+      members: formatSubscriberCount(data.subscribers),
+      createdAt: new Date(data.created_utc * 1000).getFullYear(),
       description: data.description_html,
       publicDescription: data.public_description_html,
       category: data.advertiser_category,

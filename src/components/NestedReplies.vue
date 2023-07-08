@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { computeElapsedTime } from '@/utils/computeElapsedTime';
 import { formatHTML } from '@/utils/formatHTML';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import plusOrMinus from '../assets/icons/plusOrMinus.vue';
 
 const props = defineProps<{ replies: CommentData[] }>();
@@ -30,6 +31,7 @@ const showExpandButton = (reply: CommentData): boolean => {
         <div class="reply-header">
           <plusOrMinus v-if="showExpandButton(reply)" :id="reply.data.id" @click="toggleReplies(reply.data.id)" :shape="showReplies[reply.data.id] ? 'minus' : 'plus'"/>
           <p class="nested-author"><router-link class="user-link" :to="{ path: '/search', query: { username: reply.data.author } }">{{ reply.data.author }}</router-link></p>
+          <p class="nested-timestamp">{{ computeElapsedTime(reply.data.created_utc) }} ago</p>
         </div>
         <article v-html="formatHTML(reply.data.body_html)"></article>
       </div>

@@ -17,7 +17,6 @@ const computeReplyCount = (comment: FormattedComment): number => {
     return accumulator;
   }, 0);
 }
-
 </script>
 
 <template>
@@ -26,10 +25,15 @@ const computeReplyCount = (comment: FormattedComment): number => {
     <ul>
       <template v-for="comment in threadData.comments" :key="comment.id">
         <li v-if="comment.author">
-          <h3 v-if="!comment.author.includes('[deleted]')">
-            <router-link class="comment-author" :to="{ path: '/search', query: { username: comment.author }}">{{ comment.author }}</router-link>
-          </h3>
-          <h3 v-else>{{ comment.author }}</h3>
+
+          <div class="comment-header">
+            <h3 v-if="!comment.author.includes('[deleted]')">
+              <router-link class="comment-author" :to="{ path: '/search', query: { username: comment.author }}">{{ comment.author }}</router-link>
+            </h3>
+            <h3 v-else>{{ comment.author }}</h3>
+            <p>{{ comment.createdAt }} ago</p>
+          </div>
+          
           <div class="comment-body">
             <article v-html="formatHTML(comment.body)"></article>
             <div class="flex">

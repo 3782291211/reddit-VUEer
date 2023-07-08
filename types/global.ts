@@ -33,6 +33,7 @@ declare global {
     kind: string,
     data: {
       id: string,
+      created_utc: number,
       subreddit: string,
       permalink: string,
       selftext_html: stringOrNull,
@@ -67,6 +68,7 @@ declare global {
   /* An array of formatted Thread objects is provided to the view */
   export type Thread = {
     id: string,
+    createdAt: string,
     subreddit: string,
     url: string,
     selftext: stringOrNull,
@@ -101,6 +103,7 @@ declare global {
         {
           kind: string,
           data: {
+            created_utc: number,
             author: string,
             title: string,
             ups: number,
@@ -157,6 +160,7 @@ declare global {
     kind: string,
     data: {
       id: string,
+      created_utc: number,
       author: string,
       body: stringOrNull,
       ups: number,
@@ -188,6 +192,7 @@ declare global {
   /* We format (map) the JSON comments array before we return it to the view */
   export type FormattedComment = {
     id: number,
+    createdAt: string,
     author: string,
     body: string,
     votes: number,
@@ -197,6 +202,7 @@ declare global {
 
   /* This is the formatted data we send to the view */ 
   export type SingleThreadResponse = {
+    createdAt: string,
     author: string,
     title: string,
     votes: number,
@@ -286,7 +292,9 @@ declare global {
   export type SubredditBodyJson = {
     kind: string,
     data: {
+      subscribers: number,
       active_user_count: number,
+      created_utc: number,
       description_html: stringOrNull,
       public_description_html: string,
       advertiser_category: string,
@@ -298,7 +306,9 @@ declare global {
 
    /* This is the data being sent to the view */
    export type SubredditBodyResponse = {
-     subscribers: number,
+     online: string,
+     members: string,
+     createdAt: number,
      description: stringOrNull,
      publicDescription: string,
      category: string,
@@ -318,6 +328,7 @@ declare global {
         total_karma: number,
         subscribers?: number,
         name: string,
+        created_utc: number,
         is_gold: boolean,
         verified: boolean,
         icon_img: stringOrNull,
@@ -341,6 +352,7 @@ declare global {
     kind: string,
     data: {
       id: string,
+      created_utc: number,
       title: string,
       link_title: string,
       author: string,
@@ -354,6 +366,7 @@ declare global {
 
   export type Post = {
     id: string,
+    createdAt: string,
     newThread: stringOrNull,
     originalPost: stringOrNull,
     author: string,
@@ -366,6 +379,7 @@ declare global {
   export type ProfileData = {
     icon: string,
     name: string,
+    createdAt: string,
     karma: number,
     subscribers: number | null,
     banned: null | string | boolean,

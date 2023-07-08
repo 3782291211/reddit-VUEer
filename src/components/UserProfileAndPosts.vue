@@ -32,6 +32,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
       <div>
         <h3><hearts/>{{ userProfileData.name }}</h3>
         <div class="flex">
+          <p>Joined: {{ userProfileData.createdAt }}</p>
           <p>Karma: {{ userProfileData.karma }}</p>
           <p v-if="userProfileData.subscribers">Subscribers: {{ userProfileData.subscribers }}</p>
           <p v-if="userProfileData.isVerified"><font-awesome-icon icon="fa-solid fa-circle-check" style="color: #59d936; margin-right: 5;"/>Verified</p>
@@ -52,6 +53,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
               <p class="op"><font-awesome-icon class="comment-icon" icon="fa-solid fa-comment-dots" />Replied to &quot;<router-link :to="formatRouteDescriptor('thread', comment.link)" class="title">{{ comment.originalPost }}</router-link>&quot;</p>
               <router-link :to="formatRouteDescriptor('subreddit', comment.link)" class="subreddit-link">{{ comment.subreddit }}</router-link>
             </div>
+            <p class="time">{{ comment.createdAt }} ago</p>
             <p>{{ comment.author }} wrote:</p>
             <blockquote class="italic" v-html="formatHTML(comment.body)"></blockquote>
           </template>
@@ -61,6 +63,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
               <p class="op-no-border"><font-awesome-icon class="thread-icon" icon="fa-solid fa-file-circle-plus" />{{ comment.author }} posted a new thread in {{ comment.subreddit }}</p>
               <router-link :to="formatRouteDescriptor('subreddit', comment.link)" class="subreddit-link">{{ comment.subreddit }}</router-link>
             </div>
+            <p class="time">{{ comment.createdAt }} ago</p>
             <p class="new-thread"><router-link :to="formatRouteDescriptor('thread', comment.link)" class="title white">{{ removeEntities(comment.newThread as string) }}</router-link></p>
         </template>
       </li>

@@ -4,6 +4,7 @@ import { computed, ref } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { formatHTML } from '../utils/formatHTML';
 import { formatURL } from '../utils/formatURL';
+import { removeEntities } from '@/utils/removeEntities';
 
 const { item } = defineProps<{ item: Thread }>();
 
@@ -16,7 +17,7 @@ const thumbnailSrc: ComputedRef<boolean> =
 
 <template>
   <router-link :to="item.url">
-    <h2>{{ item.title }}</h2>
+    <h2>{{ removeEntities(item.title) }}</h2>
   </router-link>
   <article>
     <div class="author-votes">
@@ -25,6 +26,7 @@ const thumbnailSrc: ComputedRef<boolean> =
         <router-link class="user-link" :to="{ path: '/search', query: { username: item.author } }">{{ item.author }}</router-link>
         in 
         <router-link class="subreddit-link" :to="{name: 'subreddit', params: { subreddit: item.subreddit.slice(2) }}">{{ item.subreddit }}</router-link>
+        <span class="timestamp"><font-awesome-icon icon="fa-solid fa-calendar fa-lg" class="fa-lg" transform="left-5"/>{{ item.createdAt }} ago</span>
       </p>
       <div class="votes">
         <img src="../assets/icons/updown.svg">
@@ -37,10 +39,14 @@ const thumbnailSrc: ComputedRef<boolean> =
       <img v-if="showImage" referrerpolicy="no-referrer" :src="item.src" @error="() => showImage = false"/>
       <img v-if="thumbnailSrc" :src="item.thumbnail" @error="() => showThumbnail = false" style="display: inline"/>
     </router-link>
-      <video v-if="item.media" width="400" height="300" controls>
-        <source :src="item.media" type="video/mp4">
-        Your browser does not support this file format.
-      </video>
+
+    <video-player
+    v-if="item.media" 
+    class="video-player"
+    :src="item.media"
+    controls
+    :loop="true"
+    :volume="0.6"/>
   </article>
 </template>
 

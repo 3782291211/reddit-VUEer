@@ -6,6 +6,8 @@ import {
   throwSearchError
 } from "./apiRequestHelpers";
 
+import { computeElapsedTime } from "./computeElapsedTime";
+
 export const fetchPopularThreads = async ([after, before, count, sortBy, subreddit]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
   let baseUrl;
   if (subreddit) {
@@ -57,10 +59,11 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
     
     const json: SingleThreadJson = await response.json();
     const data = json[0].data.children[0].data;
-    
+    console.log(json)
     const comments: FormattedComment[] = json[1].data.children.map(({ data }: { data: any }) => {
       return {
         id: data.id,
+        createdAt: computeElapsedTime(data.created_utc),
         author: data.author,
         body: data.body_html,
         votes: data.ups - data.downs,
@@ -69,7 +72,8 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
       }
     });
 
-    return { 
+    return {
+      createdAt: computeElapsedTime(data.created_utc),
       author: data.author, 
       title: data.title, 
       votes: Number(data.ups) + Number(data.downs),
@@ -133,7 +137,6 @@ export const searchUser = async (username: string): Promise<SearchUserResponse> 
 
   if (!response[0].ok || !response[1].ok) throwSearchError(response[0]);
   const json: SearchUserJson = await Promise.all([response[0].json(), response[1].json()]);
-  
   const posts: Post[] | [] = json[0].data?.children.length ? transformSearchResult(json[0].data.children) : [];
 
   if (!json[1].data.subreddit) throw new Error(`Unable to retreive data for user "${username}".`);
@@ -141,6 +144,7 @@ export const searchUser = async (username: string): Promise<SearchUserResponse> 
   const profileData: ProfileData = {
     icon: json[1].data.icon_img || json[1].data.subreddit.icon_img || '',
     name: json[1].data.subreddit.display_name_prefixed || json[1].data.name,
+    createdAt: new Date(json[1].data.created_utc * 1000).toDateString().slice(4),
     karma: json[1].data.total_karma,
     subscribers: json[1].data.subscribers || 0,
     banned: json[1].data.subreddit.user_is_banned,
