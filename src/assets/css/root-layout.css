@@ -27,21 +27,58 @@ header svg {
 }
 
 input {
-  display: block;
-  width: 98%;
-  height: 25px;
   font-size: 15px;
-  padding: 13px;
-  border-radius: 16px;
-  margin: auto auto 4px;
-  border: 1px solid #ef53507d
+  padding: 7px;
+  border: 1px solid rgb(86, 82, 87);
 }
 
-.icon {
+input[name="submit"] {
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+  width: 35%;
+  background: linear-gradient(90deg,#db6937 0,#dc3545 100%);
+  color: white;
+  font-weight: 700;
+  text-align: left;
+}
+
+input[name="search"] {
+  border-top-left-radius: 18px;
+  border-bottom-left-radius: 18px;
+  width: 65%;
+  padding-left: 10px;
+}
+
+
+input[type="submit"]:enabled:active {
+  border: 1px solid yellow;
+  background: black;
+}
+
+input[type="submit"]:disabled:active {
+  background: red;
+}
+
+form {
+  width: 99%;
+  margin: auto
+}
+
+
+.icon, .spinner {
   position: relative;
-  right: 30px;
-  color: black;
+  right: 27px;
+  color: rgb(255, 255, 255);
   margin-right: -15px
+}
+
+.spinner {
+  height: 25px;
+  right: 22%;
+}
+
+input.isLoading {
+  background: gray;
 }
 
 .flex {
@@ -213,10 +250,17 @@ ul[name="popular-subreddits"] {
     padding: 0
   }
 
-  input {
-    padding: 13px 7px;
-    width: 99%
+ 
+  input[name="search"] {
+    width: 90%;
+    padding-left: 14px;
   }
+
+  input[name="submit"] {
+    font-size: 14px;
+    padding-right: 85px;
+    width: 10%;
+ }
 
   .search-results {
     padding: 4px 8px;
@@ -239,8 +283,8 @@ ul[name="popular-subreddits"] {
   }
 
   .icon {
-    right: 33px;
-    bottom: 3px
+    right: 30px;
+    bottom: 0px
 }
 }
 
