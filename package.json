@@ -20,7 +20,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@videojs-player/vue": "^1.0.0",
-    "video.js": "^8.3.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
   },
