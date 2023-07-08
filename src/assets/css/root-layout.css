@@ -296,6 +296,13 @@ ul[name="popular-subreddits"] {
     top: 17px;
     height: 25px;
   }
+
+.spinner {
+  right: 55px;
+  padding: 0;
+  width: 18px;
+}
+
   
 }
 

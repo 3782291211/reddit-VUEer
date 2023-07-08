@@ -166,4 +166,12 @@ ul {
   .alert {
     top: 0;
   }
+
+  .fullWidth {
+    min-width: 100%;
+  }
+
+  form {
+    justify-content: flex-start;
+  }
 }
