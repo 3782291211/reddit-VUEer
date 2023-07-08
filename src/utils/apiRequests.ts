@@ -59,7 +59,7 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
     
     const json: SingleThreadJson = await response.json();
     const data = json[0].data.children[0].data;
-    console.log(json)
+    
     const comments: FormattedComment[] = json[1].data.children.map(({ data }: { data: any }) => {
       return {
         id: data.id,

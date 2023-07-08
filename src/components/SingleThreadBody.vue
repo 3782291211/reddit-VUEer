@@ -3,11 +3,11 @@ import { formatURL } from '../utils/formatURL';
 import { formatHTML } from '@/utils/formatHTML';
 import { removeEntities } from '@/utils/removeEntities';
 import{ computed, ref } from 'vue';
-import type { ComputedRef } from 'vue';
+import type { ComputedRef, Ref } from 'vue';
 
 const props = defineProps<{ data: SingleThreadResponse }>();
 
-const imageIndex = ref(0);
+const imageIndex: Ref<number> = ref(0);
 const currentIndex: ComputedRef<string> = computed(() => {
   return props.data.images[Math.abs(imageIndex.value) % props.data.images.length]
 });
@@ -29,12 +29,12 @@ const currentIndex: ComputedRef<string> = computed(() => {
     <h3 v-if="data.selftext" class="op">Original post</h3>
     <article v-if="data.selftext" class="thread-description" v-html="formatHTML(data.selftext)"></article>
     <a v-if="formatURL(data.url)" :href="data.url" target="_blank" class="external">{{ formatURL(data.url) }}...</a>
-    
-    <div v-if="!data.media?.reddit_video" class="caption">
+ 
+    <div v-if="!data.media?.reddit_video && data.preview" class="caption">
       <p v-if="data.media?.reddit_video">Preview</p>
       <a :href="data.url" target="_blank">
         <div class="image-bg" :style="{ backgroundImage: `url(${removeEntities(data.preview) || data.url})`}">
-          <img :class="[{limitHeight: data.media?.reddit_video}, 'preview-img']" :src="removeEntities(data.preview)" @error="e => (e.target as HTMLImageElement).src = data.url">
+          <img :class="[{limitHeight: data.media?.reddit_video}, 'preview-img']" :src="removeEntities(data.preview)">
         </div>
       </a>
     </div>
