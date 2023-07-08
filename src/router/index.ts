@@ -17,7 +17,7 @@ const router: Router = createRouter({
     {
       path: '/search',
       name: 'user',
-      component: UserView
+      component: () => import('../views/UserView.vue')
     },
     {
       path: '/r/:subreddit',
@@ -39,8 +39,11 @@ const router: Router = createRouter({
     if (to.name === 'user' && to.query.username) {
       return {
         el: '#scrollRef',
-        top: 70
+        top: 70,
+        behavior: 'smooth'
       }
+    } else {
+      return { top: 0 }
     }
   }
 })
