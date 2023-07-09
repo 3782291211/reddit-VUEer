@@ -79,17 +79,13 @@
   }
 
   .subredditPagination {
-    margin-top: 60px
+    margin-top: 35px
   }
 }
 
 @media (max-width: 500px) {
   .subredditThreads {
     overflow-x: hidden;
-  }
-
-  .subreddit-threads-ul {
-    padding-bottom: 10px;
   }
 
   .subreddit-threads-title {

@@ -94,7 +94,7 @@ const h1TextContent = computed(() => {
 });
 
 const bottomMargin = computed(() => {
-  return { marginBottom: route.params.subreddit ? '-20px' : '40px' };
+  return { marginBottom: route.params.subreddit ? '0px' : '40px' };
 })
 
 </script>
