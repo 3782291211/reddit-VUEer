@@ -60,6 +60,7 @@ declare global {
 
   export type VideoMedia = {
     reddit_video: {
+      dash_url: string,
       fallback_url: string,
       [key: string]: any
     }
@@ -122,22 +123,7 @@ declare global {
               [key: string]: any
             } | {},
             media_metadata?: {
-              [key: string]: {
-                status: string,
-                e: string,
-                id: string,
-                m: string,
-                p: {
-                  u: string,
-                  x: number,
-                  y: number
-                }[],
-                s: {
-                  u: string,
-                  x: number,
-                  y: number
-                }
-              }
+              [key: string]: MediaData
             },
             preview: {
               enabled: boolean,
@@ -153,6 +139,23 @@ declare global {
           }
         }
       ]
+    }
+  }
+
+  export type MediaData = {
+    status: string,
+    e: string,
+    id: string,
+    m: string,
+    p: {
+      u: string,
+      x: number,
+      y: number
+    }[],
+    s: {
+      u: string,
+      x: number,
+      y: number
     }
   }
 
@@ -191,7 +194,7 @@ declare global {
 
   /* We format (map) the JSON comments array before we return it to the view */
   export type FormattedComment = {
-    id: number,
+    id: string,
     createdAt: string,
     author: string,
     body: string,
@@ -221,41 +224,12 @@ declare global {
     embed: string
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////
-  /* These 2 types are used for checking the number of replies within the NestedReplies component */
-
-  //WE MIGHT CAN DELET THESE TWO
-
-  export type JsonComment = {
-    author: string,
-    body: string,
-    id: string,
-    numberOfReplies: number,
-    replies: {
-      kind: string,
-      data: {
-        [key: string]: any,
-        children: { 
-          kind: string,
-          data: { [key: string]: any }
-        }[]
-      }
-    },
-    title: string | undefined,
-    votes: number
-  }
-
-  export type SingleComment = { 
-    kind: string,
-    data: { 
-      [key: string]: any }
-    };
-
   ///////////////////////////////////////////////////////////////////////////
   /* Search subreddits */
   export type SubredditJson = {
     kind: string,
     data: {
+      icon_img: string,
       display_name_prefixed: string,
       [Key: string]: any
     }
