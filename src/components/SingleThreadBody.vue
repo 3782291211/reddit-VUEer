@@ -46,10 +46,10 @@ const currentIndex: ComputedRef<string> = computed(() => {
       <img class="gallery-img" :src="removeEntities(currentIndex)" referrerpolicy="origin">
       <div class="gallery-buttons">
         <span name="previous">
-          <font-awesome-icon @click="() => imageIndex--" icon="fa-solid fa-circle-chevron-left"/>
+          <font-awesome-icon @click="() => imageIndex--" icon="fa-solid fa-circle-chevron-left" data-cy="gallery-previous"/>
         </span>
         <span name=next>
-          <font-awesome-icon @click="() => imageIndex++" icon="fa-solid fa-circle-chevron-right"/>
+          <font-awesome-icon @click="() => imageIndex++" icon="fa-solid fa-circle-chevron-right" data-cy="gallery-next"/>
         </span>
       </div>
     </figure>

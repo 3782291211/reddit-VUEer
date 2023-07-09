@@ -38,8 +38,8 @@ watch(() => route.params, () => showMenu.value = false);
     </header>
 
     <div class="menu-controls">
-      <list v-if="!showMenu" class="mobile" @click="() => showMenu = true"/>
-      <close v-if="showMenu" class="mobile" @click="() => showMenu = false"/>
+      <list v-if="!showMenu" class="mobile" @click="() => showMenu = true" data-cy="mobile-menu-open"/>
+      <close v-if="showMenu" class="mobile" @click="() => showMenu = false" data-cy="mobile-menu-close"/>
     </div>
 
     <section v-if="showMenu || windowWidth > 1000" id="feeds">
