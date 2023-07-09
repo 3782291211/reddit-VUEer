@@ -1,4 +1,4 @@
-const devURL: string = 'https://localhost:5173';
+const devURL: string = 'http://localhost:5173';
 const centerScroll: Partial<Cypress.ClickOptions> = { scrollBehavior: 'center' };
 
 describe('PopularThreadsView', () => {
@@ -34,8 +34,7 @@ describe('PopularThreadsView', () => {
 
 describe('Navigation', () => {
   beforeEach(() => {
-  // run these tests as if in a desktop
-  // browser with a 720p monitor
+  // run these tests as if in a desktop browser with a 720p monitor
     cy.viewport(3440, 1440);
     cy.visit('/');
   });
@@ -97,7 +96,6 @@ describe('root layout', () => {
   });
 
   it('sidebar search returns "no results" if there are no matching subreddits', () => {
-    cy.visit('/');
     cy.contains(/no results/i).should('not.exist');
     cy.get('[data-cy="sidebar-search"]').type('87hfe87gbsdfvusuvfsfews');
     cy.get('[data-cy="sidebar-submit"]').click();
@@ -107,9 +105,36 @@ describe('root layout', () => {
     cy.wait(4000);
     cy.contains(/no results/i).should('not.exist');
   });
+
+  it('attempting to navigate to a private subreddit causes the error modal to appear', () => {
+    cy.get('[data-cy="sidebar-search"]').type('photos');
+    cy.get('[data-cy="sidebar-submit"]').click();
+    cy.contains('r/photos').click(centerScroll);
+    cy.get('[data-cy="error-modal"]').should('exist');
+    cy.get('[data-cy="error-modal-msg"]')
+      .contains('r/photos is a private community. Only approved members can view and take part in its discussions.');
+    cy.get('[data-cy="error-modal-dismiss"]').click();
+    cy.get('[data-cy="error-modal"]').should('not.exist');
+  });
+
+  it('top search bar allows user to search for a specific thread', () => {
+    cy.get('[data-cy="navbar-input"]').type('Brownies with Swiss chocolate');
+    cy.get('[data-cy="navbar-submit"]').click(centerScroll);
+    cy.contains('Brownies with Swiss chocolate').click(centerScroll);
+    cy.url().should('contain', '/r/food/comments/14rve4d/homemade_brownies_with_swiss_chocolate/');
+    cy.get('h1').should('have.text', '[homemade] Brownies with Swiss chocolate');
+  });
+
+  it.only('searching for a non-existent article casues a notification to appear', () => {
+    cy.get('[data-cy="navbar-input"]').type('sdfs9df8hsdf7gsd8fdsfsd');
+    cy.get('[data-cy="navbar-submit"]').click(centerScroll);
+    cy.contains('No results');
+    cy.wait(3000);
+    cy.get('.alert').should('not.exist');
+  });
 });
 
-describe.only('search user', () => {
+describe('search user', () => {
   beforeEach(() => {
     cy.viewport(1280, 720);
   });
@@ -147,7 +172,7 @@ describe.only('search user', () => {
     });
   });
 
-  it.only('clicking on an article link within a comment card takes user to the article', () => {
+  it('clicking on an article link within a comment card takes user to the article', () => {
     cy.visit('/search');
     cy.get('[data-cy="search-user-input"]').type('anotherfrankhere');
     cy.get('[data-cy="search-user-submit"]').click();
