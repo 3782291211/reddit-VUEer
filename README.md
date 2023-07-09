@@ -32,15 +32,10 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 
 <p float="left">
   <img src="./src/assets/screenshots/trending.png" width="180" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="./src/assets/screenshots/thread-card.png" width="180" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="./src/assets/screenshots/thread-body.png" width="180" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="./src/assets/screenshots/profile.png" width="180" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="./src/assets/screenshots/comments.png" width="180" /> 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="./src/assets/screenshots/nav.png" width="180" />
 </p>
 
