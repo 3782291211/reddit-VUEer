@@ -91,6 +91,10 @@ const h1TextContent = computed(() => {
   : params.subreddit ?
   `Popular threads in r/${route.params.subreddit}`
   : 'Popular threads';
+});
+
+const bottomMargin = computed(() => {
+  return { marginBottom: route.params.subreddit ? '-20px' : '40px' };
 })
 
 </script>
@@ -101,11 +105,12 @@ const h1TextContent = computed(() => {
     <template v-else-if="threads.length">
       <h1 class="subreddit-threads-title">{{ h1TextContent }}</h1>
       <Pagination :pagination="pagination" @handle-pagination="handlePagination"/>
-      <ul class="subreddit-threads-ul" data-cy="threads-list">
+      <ul class="subreddit-threads-ul" :style="bottomMargin" data-cy="threads-list">
         <li v-for="item in threads" :key="item.id" class="thread-preview">
           <ThreadPreviewCard :item="item"/>
         </li>
       </ul>
+      <Pagination :pagination="pagination" @handle-pagination="handlePagination"/>
       <BackToTopButton/>
     </template>
   </section>

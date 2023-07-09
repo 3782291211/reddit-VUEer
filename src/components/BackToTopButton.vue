@@ -12,7 +12,7 @@ const scrollToTop = () => window.scroll({
 <style scoped>
 button {
   display: block;
-  margin: 50px auto 0;
+  margin: 40px auto 0;
   padding: 9px;
   color: white;
   font-size: 15px;
