@@ -12,14 +12,14 @@ const router = useRouter();
 <template>
 
 <div class="modal">
-  <div class="modal-content">
+  <div class="modal-content" data-cy="error-modal">
     <h2>There was an error.</h2>
     <div class="flex">
       <div class="buttons-flex">
         <button @click="() => router.go(-1)" class="close margin-right">Return</button>
-        <button class="close" @click="$emit('close')">Dismiss</button>
+        <button class="close" @click="$emit('close')" data-cy="error-modal-dismiss">Dismiss</button>
       </div>
-      <p class="message">{{ errorMsg }}</p>
+      <p class="message" data-cy="error-modal-msg">{{ errorMsg }}</p>
     </div>
   </div>
 </div>

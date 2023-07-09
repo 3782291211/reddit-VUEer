@@ -93,10 +93,10 @@ const handleReset = () => {
 <main>
   <h1>Search users</h1>
   <form @submit.prevent="handleSubmit">
-    <input v-model="searchTerm" type="text" placeholder="Search by username">
-    <input type="submit">
+    <input v-model="searchTerm" type="text" placeholder="Search by username" data-cy="search-user-input">
+    <input type="submit" data-cy="search-user-submit">
     <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" inverse transform="left-32 down-2" beat />
-    <input type="reset" value="Clear" @click="handleReset">
+    <input type="reset" value="Clear" @click="handleReset" data-cy="search-user-reset">
   </form>
  
   <Spinner v-if="isLoading"/>

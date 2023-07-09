@@ -2,7 +2,8 @@
 import list from '../assets/icons/list.vue';
 import close from '../assets/icons/close.vue';
 import SearchBar from '../components/SearchBar.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 defineProps<{
   windowWidth: number,
@@ -22,7 +23,9 @@ defineEmits<{
   (e: 'handleSubmit'): void
 }>();
 
+const route = useRoute();
 const showMenu = ref(false);
+watch(() => route.params, () => showMenu.value = false);
 
 </script>
 

@@ -51,22 +51,22 @@ const roundedBorder = computed(() => {
 <template>
   <section>
     <form @submit.prevent="handleSubmit">
-      <input v-model.trim="searchTerm" type="text" placeholder="Search threads" :class="roundedBorder">
+      <input v-model.trim="searchTerm" type="text" placeholder="Search threads" :class="roundedBorder" data-cy="navbar-input">
       <div v-if="isLoading" class="spinner">
         <font-awesome-icon icon="spinner" spin spin-reverse size="2xl" />
       </div>
       <template v-else>
-        <input type="submit" value="Search" :disabled="!searchTerm">
+        <input type="submit" value="Search" :disabled="!searchTerm" data-cy="navbar-submit">
         <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" beat/>
       </template>
     </form>
     <ul v-if="searchResults.length && showResults" name="search-results">
       <li v-for="thread in searchResults" :key="thread.id">
-        <router-link name="link" :to="`${thread.link}`" :class="['search-results']">{{ thread.title }}</router-link>
+        <router-link name="link" :to="`${thread.link}`" class="search-results">{{ thread.title }}</router-link>
       </li>
     </ul>
     <p class="alert" v-if="showAlert">No results.</p>
-    <router-link to="/search" id="users">Users
+    <router-link to="/search" id="users" data-cy="users-navlink">Users
       <font-awesome-icon icon="user" transform="right-5"/>
     </router-link>
   </section>

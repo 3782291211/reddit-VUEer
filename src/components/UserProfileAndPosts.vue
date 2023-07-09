@@ -46,7 +46,7 @@ const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;
     <template v-if="userPosts.length">
       <h2 :style="h2Margin">Posts</h2>
       <Pagination v-if="showPagination" :pagination="pagination" @handle-pagination="$emit('handle-pagination', $event)"/>
-      <ul>
+      <ul data-cy="user-posts">
         <li class="thread-preview" v-for="comment in userPosts" :key="comment.id">
           <template v-if="comment.body">
             <div class="post-header">

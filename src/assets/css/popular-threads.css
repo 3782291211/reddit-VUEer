@@ -5,10 +5,6 @@
   padding-bottom: 50px;
 }
 
-.subredditThreads {
-  overflow-x: auto;
-}
-
 .subredditThreads li {
   width: 100%;
 }
@@ -88,6 +84,10 @@
 }
 
 @media (max-width: 500px) {
+  .subredditThreads {
+    overflow-x: auto;
+  }
+
   .subreddit-threads-title {
     top: 10px;
     margin: auto;
