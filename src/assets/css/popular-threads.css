@@ -85,7 +85,11 @@
 
 @media (max-width: 500px) {
   .subredditThreads {
-    overflow-x: auto;
+    overflow-x: hidden;
+  }
+
+  .subreddit-threads-ul {
+    padding-bottom: 10px;
   }
 
   .subreddit-threads-title {
