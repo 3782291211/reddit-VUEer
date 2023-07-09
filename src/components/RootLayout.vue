@@ -15,7 +15,7 @@ const noResults: Ref<boolean> = ref(false);
 const formIsFocussed: Ref<boolean> = ref(false);
 const timeoutID: Ref<ReturnType<typeof setTimeout> | null> = ref(null);
 const activeParam: Ref<string> = ref('');
-const showMenu = ref(false);
+const showMenu: Ref<boolean> = ref(false);
 const windowWidth: Ref<number> = ref(window.innerWidth);
 
 onMounted(async () => {

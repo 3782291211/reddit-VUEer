@@ -4,13 +4,13 @@ import type { Ref } from 'vue';
 import { searchThreads } from '@/utils/apiRequests';
 import { useRoute } from 'vue-router';
 
-const searchTerm = ref('');
-const searchResults: Ref<SearchThreadsResponse | []> = ref([]);
-const showResults = ref(true);
-const isLoading = ref(false);
-const showAlert = ref(false);
-const alertID: Ref<ReturnType<typeof setTimeout> | null> = ref(null);
 const route = useRoute();
+const searchTerm: Ref<string> = ref('');
+const searchResults: Ref<SearchThreadsResponse | []> = ref([]);
+const showResults: Ref<boolean> = ref(true);
+const isLoading: Ref<boolean> = ref(false);
+const showAlert: Ref<boolean> = ref(false);
+const alertID: Ref<ReturnType<typeof setTimeout> | null> = ref(null);
 
 const handleSubmit = async () => {
   isLoading.value = true;

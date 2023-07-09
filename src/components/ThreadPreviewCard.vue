@@ -10,8 +10,7 @@ const { item } = defineProps<{ item: Thread }>();
 
 const showImage: Ref<boolean> = ref(true);
 const showThumbnail: Ref<boolean> = ref(true);
-const thumbnailSrc: ComputedRef<boolean> = 
-    computed(() => !showImage && !item.media && showThumbnail);
+const thumbnailSrc: ComputedRef<boolean> = computed(() => !showImage && !item.media && showThumbnail);
 
 </script>
 
