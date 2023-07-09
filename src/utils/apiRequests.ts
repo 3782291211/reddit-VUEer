@@ -25,6 +25,7 @@ export const fetchPopularThreads = async ([after, before, count, sortBy, subredd
 
   const response = await fetch(baseUrl + queryString);
   const json: PopularThreadsJson | ErrorJson = await response.json();
+ 
   /* The json response might be an error response 
   (if the subreddit is private, for example). */
   if (!(json as PopularThreadsJson).data && subreddit) {
