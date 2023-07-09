@@ -2,7 +2,7 @@
 import list from '../assets/icons/list.vue';
 import close from '../assets/icons/close.vue';
 import SearchBar from '../components/SearchBar.vue';
-import { ref, watch } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 defineProps<{
@@ -12,7 +12,7 @@ defineProps<{
   searchResults: string[],
   showSearchResults: boolean,
   noResults: boolean,
-  popularSubreddits: string[],
+  popularSubreddits: {icon: string, subredditName: string}[],
   modelValue: string,
   isLoading: boolean
 }>();
@@ -25,6 +25,7 @@ defineEmits<{
 
 const route = useRoute();
 const showMenu = ref(false);
+const showAltIcon: {[key: string]: boolean} = reactive({});
 watch(() => route.params, () => showMenu.value = false);
 
 </script>
@@ -76,8 +77,12 @@ watch(() => route.params, () => showMenu.value = false);
       <template v-if="!showSearchResults">
       <h3>Popular subreddits</h3>
         <ul v-if="popularSubreddits.length" name="popular-subreddits" data-cy="popular-subreddits">
-          <li v-for="subreddit in popularSubreddits" :key="subreddit">
-            <router-link :class="[...activeClass(subreddit), 'popular']" :to="`/${subreddit}`">{{ subreddit }}</router-link>
+          <li v-for="subreddit in popularSubreddits" :key="subreddit.subredditName">
+            <router-link :class="[...activeClass(subreddit.subredditName), 'popular']" :to="`/${subreddit.subredditName}`">
+              <img v-if="!showAltIcon[subreddit.subredditName]" class="subreddit-icon" :src="subreddit.icon" @error="() => showAltIcon[subreddit.subredditName] = true">
+              <font-awesome-icon v-if="showAltIcon[subreddit.subredditName]" class="alt-icon" icon="fa-solid fa-star" spin/>
+              <span>{{ subreddit.subredditName }}</span>
+            </router-link>
           </li>
         </ul>
         <font-awesome-icon v-else icon="spinner" spin transform="right-90% up-19" spin-reverse size="2xl" />

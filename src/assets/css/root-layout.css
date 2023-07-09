@@ -152,6 +152,21 @@ ul[name="popular-subreddits"] {
   transition: 0.4s;
 }
 
+.subreddit-icon, .alt-icon {
+  height: 25px;
+  width: 25px;
+  position: relative;
+  margin: -5px 6px -5px 0;
+  /* margin-right: 6px; */
+  top: 3px;
+  border-radius: 50%;
+}
+
+.alt-icon {
+  color: #c5535e;
+  top: 1px;
+}
+
 .no-results {
   margin: 4px 0 0 4px;
   color: orange;
@@ -268,6 +283,18 @@ ul[name="popular-subreddits"] {
     border-radius: 15px;
     padding: 6px 9px;
     margin: -2px 0;
+  }
+
+  .subreddit-icon {
+    margin-right: 4px;
+    top: 2px;
+    margin-left: -5px;
+  }
+
+  .alt-icon {
+    top: 0px;
+    margin-left: -3px;
+    margin-right: 2px
   }
 
   .router-links {

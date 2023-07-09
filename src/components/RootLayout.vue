@@ -8,7 +8,7 @@ import RootLayoutTemplate from './RootLayoutTemplate.vue';
 
 const route = useRoute();
 const searchResults: Ref<string[] | []> = ref([]);
-const popularSubreddits: Ref<string[] | []> = ref([]);
+const popularSubreddits: Ref<{icon: string, subredditName: string}[] | []> = ref([]);
 const searchTerm: Ref<string> = ref('');
 const isLoading: Ref<boolean> = ref(false);
 const noResults: Ref<boolean> = ref(false);
@@ -33,7 +33,9 @@ onUnmounted(() => {
 watch(() => route.params, toParam => {
   activeParam.value = toParam.subreddit as string || toParam.sortBy as string;
   showMenu.value = false;
-})
+});
+
+watch(searchTerm, () => searchResults.value = []);
 
 const handleSubmit = async () => {
   if (!searchTerm.value) return;
