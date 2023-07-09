@@ -18,14 +18,13 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 
 ## Key product features
 - Strict type-checking and type-based declarations fully integrated into every part of the app.
-- Utilises **composition API** for component setup, hooks and reactivity features.
-- Data fetching and asynchronous error handling using the reddit JSON API.
-- Includes end-to-end testing with **Cypress** and unit testing with **Mocha + Chai**.
+- Utilises [**composition API**](https://vuejs.org/guide/extras/composition-api-faq.html) for component setup, hooks and reactivity features.
+- [Data fetching](/src/utils/apiRequests.ts) and asynchronous error handling using the reddit JSON API.
+- Includes [end-to-end testing with **Cypress**](/cypress/e2e/UserJourneys.cy.ts) and [unit testing with **Mocha + Chai**](/src/components/__tests__/unit-tests.cy.ts).
 - Extensive use of props, watchers, lifecycle hooks, emitted events and conditional rendering.
-- Features recursive components for unknown configurations of deeply nested replies.
-- Reusable components and functions with low coupling.
-- Vue Router for declarative and imperative client-side navigation.
-- Image gallery slideshows animated using Vue transition groups.
+- Features [recursive components](/src/components/NestedReplies.vue) for unknown configurations of deeply nested replies.
+- [Vue Router](/src/router/index.ts) for declarative and imperative client-side navigation.
+- [Image gallery slideshows](/src/assets/screenshots/gallery.gif) animated using Vue transition groups.
 - Mobile-first design with an engaging user experience.
 
 ## Mobile views
@@ -73,3 +72,4 @@ npm run test:unit
 ```sh
 npm run test:e2e:dev
 ```
+Once the Cypress app is launched, you will need to click on the **[```UserJourneys.cy.ts```](/cypress/e2e/UserJourneys.cy.ts)** E2E spec to run the test suite.
