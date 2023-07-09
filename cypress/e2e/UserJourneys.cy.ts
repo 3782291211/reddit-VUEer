@@ -3,6 +3,7 @@ const centerScroll: Partial<Cypress.ClickOptions> = { scrollBehavior: 'center' }
 
 describe('PopularThreadsView', () => {
   beforeEach(() => {
+    cy.viewport(1280, 720);
     cy.visit('/');
   });
 
@@ -11,7 +12,7 @@ describe('PopularThreadsView', () => {
   });
 
   it('visiting "/" renders list containing 25 popular threads', () => {
-    cy.get('h1').should('have.text', 'Popular threads');
+    cy.get('h1').first().should('have.text', 'Popular threads');
     cy.get('li.thread-preview').should('have.length', 25);
   });
 
@@ -22,7 +23,7 @@ describe('PopularThreadsView', () => {
 
   it('after clicking the next button, the previous button and a new list are rendered', () => {
     cy.get('[data-cy="threads-list"]').then(initialList => {
-      cy.get('[data-cy="popular-next"]').click({ scrollBehavior: 'center' });
+      cy.get('[data-cy="popular-next"]').first().click({ scrollBehavior: 'center' });
       cy.get('[data-cy="popular-previous"]').should('exist');
       cy.get('[data-cy="threads-list"]').should(listAfterPagination => {
         expect(listAfterPagination.children()).to.have.lengthOf(25)
@@ -35,7 +36,7 @@ describe('PopularThreadsView', () => {
 describe('Navigation', () => {
   beforeEach(() => {
   // run these tests as if in a desktop browser with a 720p monitor
-    cy.viewport(3440, 1440);
+    cy.viewport(1280, 720);
     cy.visit('/');
   });
 
