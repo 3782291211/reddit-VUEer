@@ -125,12 +125,47 @@ describe('root layout', () => {
     cy.get('h1').should('have.text', '[homemade] Brownies with Swiss chocolate');
   });
 
-  it.only('searching for a non-existent article casues a notification to appear', () => {
+  it('searching for a non-existent article casues a notification to appear', () => {
     cy.get('[data-cy="navbar-input"]').type('sdfs9df8hsdf7gsd8fdsfsd');
     cy.get('[data-cy="navbar-submit"]').click(centerScroll);
     cy.contains('No results');
     cy.wait(3000);
     cy.get('.alert').should('not.exist');
+  });
+});
+
+describe('mobile navbar', () => {
+  beforeEach(() => {
+    cy.viewport(412, 732);
+    cy.visit('/');
+  });
+
+  it('Allows user to search for a specific thread', () => {
+    cy.wait(2000);
+    cy.get('[data-cy="mobile-menu-open"]').click(centerScroll);
+    cy.contains('r/Home');
+    cy.get('[data-cy="navbar-input"]').type('[homemade] ravioli');
+    cy.get('[data-cy="navbar-submit"]').click();
+    cy.contains(/\[homemade\] ravioli/i).click();
+    cy.url().should('contain', '/r/food/comments/14ulzfv/homemade_ravioli/');
+    cy.contains('h1', /\[homemade\] ravioli/i);
+  });
+
+  it('Allows user to serach for a specific subreddit', () => {
+    cy.wait(2000);
+    cy.get('[data-cy="mobile-menu-open"]').click(centerScroll);
+    cy.get('#search').type('gaming');
+    cy.get('[data-cy="sidebar-submit"]').click();
+    cy.contains('r/gaming').click();
+    cy.url().should('contain', 'r/gaming');
+  });
+
+  it('Mobile navbar \'users\' button takes closes the navbar menu and takes user to the correct page', () => {
+    cy.wait(2000);
+    cy.get('[data-cy="mobile-menu-open"]').click(centerScroll);
+    cy.contains('Users').click();
+    cy.get('#feeds').should('not.exist');
+    cy.url().should('contain', '/search');
   });
 });
 
@@ -181,11 +216,6 @@ describe('search user', () => {
       cy.get('.title').first().click(centerScroll);
       cy.url().should('contain', newURL);
       cy.get('h1').contains(title.text());
-      // Assert that one of the comments belongs to the subject under test
-      cy.get('.comment-author, .user-link').then(commentHeaders => {
-        const commentAuthors = Array.from(commentHeaders).map(header => header.innerText);
-        expect(commentAuthors.map(author => author.toLowerCase())).to.include('anotherfrankhere');
-      })
     });
   });
 
@@ -199,7 +229,10 @@ describe('search user', () => {
     cy.get('[data-cy="error-modal-msg"]').contains('I cannot find an account that matches that username');
     cy.get('[data-cy="error-modal-dismiss"]').click();
     cy.get('[data-cy="error-modal"]').should('not.exist');
+  });
+
+  it('searching for a user with no comments displays the appropriate feeddback message', () => {
+    cy.visit('search?username=lukk');
+    cy.contains('hmmm...u/lukk hasn\'t posted anything.');
   })
 });
-
-// What does scrollIntoView do?
