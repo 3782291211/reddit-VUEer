@@ -61,7 +61,7 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
     const json: SingleThreadJson = await response.json();
     const data = json[0].data.children[0].data;
     
-    const comments: FormattedComment[] = json[1].data.children.map(({ data }: { data: any }) => {
+    const comments: FormattedComment[] = json[1].data.children.map(({ data }: CommentData) => {
       return {
         id: data.id,
         createdAt: computeElapsedTime(data.created_utc),
@@ -83,7 +83,7 @@ export const fetchSingleThread = async (subreddit: string, id: string, threadTit
       sub: data.subreddit_name_prefixed, 
       url: data.url,
       media: data.secure_media,
-      images: data.media_metadata ? Object.values(data.media_metadata).map((item: any) => item.s.u) : [],
+      images: data.media_metadata ? Object.values(data.media_metadata).map((item: MediaData) => item.s.u) : [],
       preview: data.preview?.images?.[0].source?.url || '',
       embed: (data.secure_media_embed as { content: string, [key: string]: any})?.content || ''
     };
@@ -106,11 +106,11 @@ export const searchThreads = async (searchTerm: string): Promise<SearchThreadsRe
   const response = await fetch(url);
   const json: SearchThreadsJson = await response.json();
   if (!json.data) return [];
-  return json.data.children.map((thread: any) => {
+  return json.data.children.map(({ data }: ThreadJson) => {
     return {
-      id: thread.data.id,
-      title: thread.data.title,
-      link: thread.data.permalink
+      id: data.id,
+      title: data.title,
+      link: data.permalink
     }
   });
 }
@@ -123,11 +123,15 @@ export const fetchSubredditBody = async (subreddit: string): Promise<SubredditBo
   return transformSubredditBody(json as SubredditBodyJson);
 }
 
-export const fetchPopularSubreddits = async(): Promise<string[]> => {
+export const fetchPopularSubreddits = async(): 
+Promise<{ icon: string, subredditName: string }[]> => {
   const url = 'https://www.reddit.com/subreddits/popular.json';
   const response = await fetch(url);
   const json: PopularSubredditsJson = await response.json();
-  return json.data.children.map(({ data } : any) => data.display_name_prefixed);
+  return json.data.children.map(({ data } : SubredditJson) => ({
+    icon: data.icon_img,
+    subredditName: data.display_name_prefixed
+  }));
 }
 
 export const searchUser = async (username: string): Promise<SearchUserResponse> => {
