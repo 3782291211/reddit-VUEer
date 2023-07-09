@@ -13,8 +13,6 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 
 > You can visit the app using **[this link](https://vuer.netlify.app)**.
 
-<br>
-
 ## [The app in action](https://vuer.netlify.app/)
 [<img src="./src/assets/screenshots/peek-demo.gif" width="700" />](https://vuer.netlify.app/)
 
@@ -32,19 +30,19 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 
 ## Mobile views
 
-<img src="./src/assets/screenshots/trending.png" width="180" /> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="./src/assets/screenshots/thread-card.png" width="180" /> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="./src/assets/screenshots/thread-body.png" width="180" /> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="./src/assets/screenshots/profile.png" width="180" /> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="./src/assets/screenshots/comments.png" width="180" /> 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="./src/assets/screenshots/nav.png" width="180" /> 
-
-<br>
+<p float="left">
+  <img src="./src/assets/screenshots/trending.png" width="180" /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./src/assets/screenshots/thread-card.png" width="180" /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./src/assets/screenshots/thread-body.png" width="180" /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./src/assets/screenshots/profile.png" width="180" /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./src/assets/screenshots/comments.png" width="180" /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./src/assets/screenshots/nav.png" width="180" />
+</p>
 
 ## Running the project in your local environment
 ### Recommended IDE Setup
