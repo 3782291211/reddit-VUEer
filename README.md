@@ -14,7 +14,11 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 > You can visit the app using **[this link](https://vuer.netlify.app)**.
 
 ## [The app in action](https://vuer.netlify.app/)
-[<img src="./src/assets/screenshots/peek-demo.gif" width="700" />](https://vuer.netlify.app/)
+[<img src="./src/assets/screenshots/peek-demo.gif" width="700" alt="Browsing the various sections of the app."/>](https://vuer.netlify.app/)
+
+## Mobile view
+
+[<img src='./src/assets/screenshots/mobile-peek-demo.gif' width="300" alt="Viewing the application on a mobile device."/>](https://vuer.netlify.app/)
 
 ## Key product features
 - Strict type-checking and type-based declarations fully integrated into every part of the app.
@@ -27,9 +31,6 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 - [Image gallery slideshows](/src/assets/screenshots/gallery.gif) animated using Vue transition groups.
 - Mobile-first design with an engaging user experience.
 
-## Mobile view
-
-<img src='./src/assets/screenshots/mobile-peek-demo.gif' width=400>
 
 ## Running the project in your local environment
 ### Recommended IDE Setup
