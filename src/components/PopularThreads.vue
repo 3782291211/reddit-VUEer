@@ -24,6 +24,22 @@ const pagination: Ref<Pagination> = ref({
   countOffset: 0
 });
 
+onMounted(() => {
+  if (props.viewType === 'home') {
+    fetchData(route.params.sortBy as string);
+  } else if (props.viewType === 'subreddit') {
+    fetchData(route.params.subreddit as string);
+  }
+});
+
+watch(() => route.params, async newParam => {
+    if (newParam.sortBy) {
+      fetchData(newParam.sortBy as string);
+    } else if (newParam.subreddit) {
+      fetchData(newParam.subreddit as string)
+    }
+});
+
 const fetchData = async (currentParam: string) => {
   isLoading.value = true;
   try {
@@ -44,22 +60,6 @@ const fetchData = async (currentParam: string) => {
     isLoading.value = false;
   }
 }
-
-onMounted(() => {
-  if (props.viewType === 'home') {
-    fetchData(route.params.sortBy as string);
-  } else if (props.viewType === 'subreddit') {
-    fetchData(route.params.subreddit as string);
-  }
-});
-
-watch(() => route.params, async newParam => {
-    if (newParam.sortBy) {
-      fetchData(newParam.sortBy as string);
-    } else if (newParam.subreddit) {
-      fetchData(newParam.subreddit as string)
-    }
-});
 
 const handlePagination = async (e: MouseEvent): Promise<void> => {
   isLoading.value = true;
@@ -84,6 +84,13 @@ const activeClass = computed(() => {
   }
 });
 
+const listClasses = computed(() => {
+  return [
+    { marginBottom: route.params.subreddit }, 
+    'subreddit-threads-ul'
+  ];
+});
+
 const h1TextContent = computed(() => {
   const params = route.params;
   return params.sortBy ? 
@@ -93,10 +100,6 @@ const h1TextContent = computed(() => {
   : 'Popular threads';
 });
 
-const bottomMargin = computed(() => {
-  return { marginBottom: route.params.subreddit ? '0px' : '40px' };
-})
-
 </script>
 
 <template>
@@ -105,7 +108,7 @@ const bottomMargin = computed(() => {
     <template v-else-if="threads.length">
       <h1 class="subreddit-threads-title">{{ h1TextContent }}</h1>
       <Pagination :pagination="pagination" @handle-pagination="handlePagination"/>
-      <ul class="subreddit-threads-ul" :style="bottomMargin" data-cy="threads-list">
+      <ul :class="listClasses" data-cy="threads-list">
         <li v-for="item in threads" :key="item.id" class="thread-preview">
           <ThreadPreviewCard :item="item"/>
         </li>

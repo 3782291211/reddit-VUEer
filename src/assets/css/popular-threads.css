@@ -15,6 +15,7 @@
 
 .subreddit-threads-ul {
   padding: 0;
+  margin-bottom: 40px;
 }
 
 .subreddit-threads-title {
@@ -44,7 +45,7 @@
 }
 
 .subredditPagination {
-  margin-top: 40px
+  margin-top: 60px
 }
 
 @media (min-width: 1000px) {
@@ -79,7 +80,7 @@
   }
 
   .subredditPagination {
-    margin-top: 35px
+    margin-top: 60px
   }
 }
 
@@ -103,5 +104,11 @@
 
   .subredditPagination {
     margin-top: 25px
+  }
+}
+
+@media (min-width: 500px) {
+  .marginBottom {
+    margin-bottom: -20px
   }
 }
