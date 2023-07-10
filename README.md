@@ -27,16 +27,9 @@ This is a Vite-powered project constructed using JSON data from the reddit API. 
 - [Image gallery slideshows](/src/assets/screenshots/gallery.gif) animated using Vue transition groups.
 - Mobile-first design with an engaging user experience.
 
-## Mobile views
+## Mobile view
 
-<p float="left">
-  <img src="./src/assets/screenshots/trending.png" width="180" /> 
-  <img src="./src/assets/screenshots/thread-card.png" width="180" /> 
-  <img src="./src/assets/screenshots/thread-body.png" width="180" /> 
-  <img src="./src/assets/screenshots/profile.png" width="180" /> 
-  <img src="./src/assets/screenshots/comments.png" width="180" /> 
-  <img src="./src/assets/screenshots/nav.png" width="180" />
-</p>
+<img src='./src/assets/screenshots/mobile-peek-demo.gif' width=400>
 
 ## Running the project in your local environment
 ### Recommended IDE Setup
