@@ -17,7 +17,7 @@ const props = defineProps<{
 }>();
 
 const showPagination: ComputedRef<boolean> = computed(() => {
-  return !!props.pagination.afterQuery || !!props.pagination.beforeQuery;
+  return Boolean(props.pagination.afterQuery || props.pagination.beforeQuery);
 });
 
 const h2Margin = `margin-bottom: ${showPagination ? '25px' : '10px'}`;

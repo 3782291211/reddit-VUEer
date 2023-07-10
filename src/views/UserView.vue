@@ -25,7 +25,6 @@ const pagination: Ref<Pagination> = ref({
 });
 
 const handlePagination = async (e: MouseEvent): Promise<void> => {
-  if (userPosts.value.length < 25) return;
   try {
     isLoading.value = true;
     const response = await paginate(pagination.value, e, null, null, route.query.username as string) as SearchUserResponse;
