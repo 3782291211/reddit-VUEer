@@ -64,6 +64,13 @@ npm run test:unit
 ### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
+# start the development server
+npm run dev
+
+# option 1: run tests in browser
 npm run test:e2e:dev
+
+# option 2: run tests in headless mode
+npx cypress run --headless --browser chrome
 ```
-Once the Cypress app is launched, you will need to click on the **[```UserJourneys.cy.ts```](/cypress/e2e/UserJourneys.cy.ts)** E2E spec to run the test suite.
+For option 1, once the Cypress app is launched, you will need to click on the **[```UserJourneys.cy.ts```](/cypress/e2e/UserJourneys.cy.ts)** E2E spec to run the test suite.
