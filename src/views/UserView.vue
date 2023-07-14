@@ -24,21 +24,6 @@ const pagination: Ref<Pagination> = ref({
   countOffset: 0
 });
 
-const handlePagination = async (e: MouseEvent): Promise<void> => {
-  try {
-    isLoading.value = true;
-    const response = await paginate(pagination.value, e, null, null, route.query.username as string) as SearchUserResponse;
-    if (response) {
-      userPosts.value = response.posts;
-      pagination.value = response.pagination;
-    }
-  } catch (err: unknown) {
-    errorMsg.value = (err as Error).message || 'Unable to process your request.';
-  } finally {
-    isLoading.value = false;
-  }
-}
-
 onMounted(() => {
   if (route.query?.username) {
     fetchUserData(route.query.username as string);
@@ -72,6 +57,21 @@ const fetchUserData = async (username: string): Promise<void> => {
     } finally {
       isLoading.value = false;
     }
+}
+
+const handlePagination = async (e: MouseEvent): Promise<void> => {
+  try {
+    isLoading.value = true;
+    const response = await paginate(pagination.value, e, null, null, route.query.username as string) as SearchUserResponse;
+    if (response) {
+      userPosts.value = response.posts;
+      pagination.value = response.pagination;
+    }
+  } catch (err: unknown) {
+    errorMsg.value = (err as Error).message || 'Unable to process your request.';
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 const handleSubmit = async () => {

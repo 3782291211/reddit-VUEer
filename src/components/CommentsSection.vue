@@ -13,7 +13,7 @@ const computeReplyCount = (comment: FormattedComment): number => {
   if (comment.numberOfReplies === 0) return 0;
   const replies = (comment.replies as NestedReplies).data.children as CommentData[];
   return replies.reduce((accumulator: number, current: CommentData) => {
-    if (current.kind != 'more') return accumulator + 1;
+    if (current.kind !== 'more') return accumulator + 1;
     return accumulator;
   }, 0);
 }
