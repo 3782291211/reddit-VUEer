@@ -69,7 +69,7 @@ watch(() => route.params, () => showMenu.value = false);
 
       <ul name="search-results" v-if="showSearchResults" data-cy="sidebar-search-results">
         <li v-for="subreddit in searchResults" :key="subreddit">
-          <a name="link" :href="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']" name="link">{{ subreddit }}</p></a>
+          <router-link name="link" :to="`/${subreddit}`"><p :class="[roundTerminalBorders(subreddit, searchResults), 'search-results']" name="link">{{ subreddit }}</p></router-link>
         </li>
       </uL>
 
