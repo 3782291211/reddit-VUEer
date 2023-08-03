@@ -14,34 +14,21 @@ export const paginate = async (
     }
     if (action === 'next' && !prevPagination.afterQuery) return null;
     
-    const args: PopularThreadsArgs = [
+    const args: [ stringOrNull, stringOrNull, number ] = [
       action === 'previous' ? null : prevPagination.afterQuery,
       action === 'previous' ? prevPagination.beforeQuery : null,
-      prevPagination.countOffset,
-      null,
-      null
+      prevPagination.countOffset
     ];
 
-    let newCountOffset: number = 0;
-    if (action === 'next') {
-      newCountOffset = 25;
-    } else if (action === 'previous') {
-      newCountOffset = -25;
-    }
+    const newCountOffset: number = action === 'next' ? 25 : -25;
 
     let response: PopularThreadsResponse | PaginateUserPosts;
     if (sortBy && !subreddit) {
-      args[3] = sortBy;
-      args[4] = null;
-      response = await fetchPopularThreads(args);
+      response = await fetchPopularThreads([...args, sortBy, null]);
     } else if (subreddit) {
-      args[3] = null;
-      args[4] = subreddit;
-      response = await(fetchPopularThreads(args));
+      response = await(fetchPopularThreads([...args, null, subreddit]));
     } else {
-      response = await searchUserWithPagination([args[0], args[1], args[2], username as string]);
-      response.pagination.countOffset = prevPagination.countOffset + newCountOffset;
-      return response;
+      response = await searchUserWithPagination([...args, username as string]);
     }
     response.pagination.countOffset = prevPagination.countOffset + newCountOffset;
     return response;

@@ -62,19 +62,18 @@ const fetchData = async (currentParam: string) => {
 }
 
 const handlePagination = async (e: MouseEvent): Promise<void> => {
-  isLoading.value = true;
-  const response: PopularThreadsResponse | null = await paginate(
-    pagination.value, 
-    e, 
-    route.params.sortBy as string,
-    route.params.subreddit as string,
-    null
-  ) as PopularThreadsResponse | null;
+  try {
+    isLoading.value = true;
+    const response = await paginate(pagination.value, e, route.params.sortBy as string, route.params.subreddit as string, null) as PopularThreadsResponse;
   if (response) {
     threads.value = response.popularThreads;
     pagination.value = response.pagination;
   }
-  isLoading.value = false;
+  } catch (err: unknown) {
+    errorMsg.value = (err as Error).message || 'Unable to process your request.';
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 const activeClass = computed(() => {
