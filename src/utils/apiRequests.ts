@@ -11,11 +11,11 @@ import { computeElapsedTime } from "./computeElapsedTime";
 export const fetchPopularThreads = async ([after, before, count, sortBy, subreddit]: PopularThreadsArgs): Promise<PopularThreadsResponse> => {
   let baseUrl;
   if (subreddit) {
-    baseUrl = `https://www.reddit.com/r/${subreddit}.json?limit=25`;
+    baseUrl = `https://www.reddit.com/r/${subreddit}/.json?limit=25`;
   } else if (sortBy === 'popular') {
-    baseUrl = 'https://www.reddit.com/r/popular.json?limit=25';
+    baseUrl = 'https://www.reddit.com/r/popular/.json?limit=25';
   } else {
-    baseUrl = `https://www.reddit.com/r/all/${sortBy}.json?limit=25`;
+    baseUrl = `https://www.reddit.com/r/all/${sortBy}/.json?limit=25`;
   }
 
   const queryString = !after && !before ? ''
